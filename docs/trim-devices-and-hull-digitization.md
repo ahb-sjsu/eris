@@ -19,6 +19,8 @@ The governing parameter is Froude number:
 | Condition | Speed | Fn | S/L | Regime |
 |---|---|---|---|---|
 | **Cruise** | 9.6 kt | **0.323** | 1.09 | **upper displacement** |
+*(LWL measured aboard at 78 ±1 ft; across that whole band Fn stays
+0.321–0.326 and the threshold below moves by 0.1 kt. Conclusions unchanged.)*
 | Max (approx, verify) | 14 kt | 0.472 | 1.59 | semi-displacement |
 
 Stern lift devices begin to earn their drag around **Fn 0.40**, which on a

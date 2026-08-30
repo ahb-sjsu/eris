@@ -138,7 +138,17 @@ hull:
     and the size of the ink line width at the drawing's 101.5 px/ft. THE
     DRAWINGS DESCRIBE ERIS. The whole Barnes set is now usable as a model,
     scaled by 0.980, rather than as a loose reference.
-  still_open: LWL (every efficiency number assumes 78 ft), draft, trim
+  lwl_ft: 78          # owner, aboard: read 77, then 79, settled on ~78
+  lwl_uncertainty_ft: 1
+  lwl_note: >
+    The +/-1 ft is not a sloppy measurement, it is a real property: a raked
+    stem means LWL grows with immersion, so the light-to-loaded swing is at
+    least this large. Chasing more precision is pointless. Sensitivity check
+    (software/analysis/trim_regime.py) confirms the band changes nothing:
+    across 77-79 ft, Fn stays 0.321-0.326, hull speed 11.8-11.9 kt, and the
+    stern-lift-device threshold 11.8-11.9 kt. Every conclusion holds.
+    nm/gal, ton-miles/gal and endurance do not depend on LWL at all.
+  still_open: draft, trim, displacement
 
 # --- performance (owner-reported 2026-08-30) ---
 performance:
