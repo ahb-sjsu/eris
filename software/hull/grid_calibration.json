@@ -1,0 +1,36 @@
+{
+ "region_px": [
+  2430,
+  1821
+ ],
+ "waterline_rows_px": [
+  626,
+  726,
+  932,
+  1030,
+  1034,
+  1135,
+  1236,
+  1338,
+  1434,
+  1438,
+  1442,
+  1541,
+  1546
+ ],
+ "buttock_cols_px": [
+  1233,
+  1537,
+  2102
+ ],
+ "vertical_calibration": {
+  "ok": true,
+  "n_rules": 13,
+  "n_regular_gaps": 7,
+  "px_per_spacing": 99.57,
+  "spacing_cv_pct": 1.92,
+  "px_per_ft": 99.571
+ },
+ "assumed_waterline_spacing_ft": 1.0,
+ "WARNING": "spacing assumption is an INPUT, not a measurement. Confirm against the drawing's labelled waterlines before any offset is derived from this calibration."
+}
