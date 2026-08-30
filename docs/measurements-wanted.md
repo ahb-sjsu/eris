@@ -12,8 +12,17 @@ than it's worth on the day.
    the flat run aft that the body plan shows? Currently neither confirmed
    nor ruled out at scan resolution.
 
-2. **Length on the waterline (LWL).** Bow-to-stern along the actual
-   waterline (boot top is fine, note which you used).
+2. **Length on the waterline (LWL).** **Measured along the fore-and-aft
+   AXIS as a straight horizontal line — not along the curve of the hull.**
+   From where the waterline meets the stem to where it ends at the transom,
+   projected on the centreline. Practical method: plumb down from the deck
+   at the stem waterline intersection and mark the dock, repeat at the
+   transom, measure dock-to-mark. Do NOT measure on deck: the raked stem
+   puts the deck bow well forward of the waterline bow. **Note fuel and
+   water levels** — a raked stem means LWL grows with load, and cruise
+   numbers should use the loaded figure. If the stem intersection is hard
+   to eyeball, LOA on deck plus "how far the deck bow overhangs the
+   waterline bow" is an equally good substitute.
    → Every efficiency number in `docs/` currently rests on an **assumed
    78 ft**. LWL sets Froude number, hull speed, the trim-tab threshold, and
    the ton-mile figures. This is the single largest source of error in the
