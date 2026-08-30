@@ -113,13 +113,22 @@ topology:
     # pressure or vacuum per duplex basket -- the standard early-warning
     # for fouling. Decide per-consumer when specifying senders.
 
-# firePump: exists (auxiliary sea chest consumer). Points TBD from the
-# vessel: driver type (electric/engine), discharge pressure, run state.
+firePump:
+  driver: electric
+  suction: topology.rawWater.seaChests.auxiliary (own duplex strainer)
+  stations:
+    port:      {desc: hose attachment, adjacent to hose stowage}
+    starboard: {desc: hose attachment, adjacent to hose stowage}
+  # visible in drawings/eris_profile_view.jpg (hose reel amidships)
+  points:
+    runState:          {type: bool}
+    amps:              {unit: A}
+    dischargePressure: {unit: Pa, sensed: false, desc: candidate sensor}
 
 # --- known gaps, to be specified from the vessel (not invented here) ---
 # tanks: black/gray water capacities; fuel plumbing topology (wing->day
 #   transfer path, polishing loop valve lineup); sender types per tank
-# firePump: driver, rating, discharge pressure sensing
+# firePump: motor rating; whether discharge pressure gets a sender
 # electrical: battery banks, chargers/inverters, shore power, solar
 #   (yacht/solar-plan.txt is currently empty)
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
