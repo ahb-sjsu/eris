@@ -7,6 +7,15 @@
 #
 # vessel: Eris, ex-USCG Point-class cutter, 82 ft
 # sister-ship drawing set: USCGC Point Barnes (drawings/)
+#
+# plant (owner-confirmed 2026-08-30):
+#   mains:   2x Cummins VT900M (milspec designation VT1710)
+#   gensets: 2x Detroit Diesel 2-71, 20 kW, 3-phase, DELTA connected,
+#            floating neutral, 440 V
+#   note: delta + floating neutral means there is no line-to-neutral
+#   quantity to measure; AC voltage channels are LINE-TO-LINE, and any
+#   ground-referenced voltage measurement on this bus is meaningless by
+#   design. Sensor selection must respect this.
 
 defaults:
   sample_interval_s: 2
@@ -33,6 +42,7 @@ templates:
 points:
   propulsion:
     port: &main_engine
+      model: "Cummins VT900M (milspec VT1710)"
       <<: *diesel_common
       egt:
         left:  {unit: K, desc: exhaust gas temp, left bank}
@@ -47,13 +57,18 @@ points:
   electrical:
     generators:
       "1": &genset
+        model: "Detroit Diesel 2-71"
+        rating_kw: 20
         <<: *diesel_common
+        # The hand list said "EGT R|L". A 2-71 is an inline two, no banks,
+        # so these are read as PER-CYLINDER probes, one per cylinder.
         egt:
-          left:  {unit: K}
-          right: {unit: K}
-        acVoltsPerPhase: {unit: V, dims: [phase]}
-        acAmpsPerPhase:  {unit: A, dims: [phase]}
-        frequency:       {unit: Hz}
+          cyl1: {unit: K}
+          cyl2: {unit: K}
+        # Delta, floating neutral: line-to-line only (see header note).
+        acVoltsLineToLine: {unit: V, dims: [L1L2, L2L3, L3L1], nominal: 440}
+        acAmpsPerLine:     {unit: A, dims: [L1, L2, L3]}
+        frequency:         {unit: Hz}
       "2": *genset
 
   ventilation:
