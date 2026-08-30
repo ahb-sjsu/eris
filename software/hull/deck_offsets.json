@@ -1,0 +1,95 @@
+{
+ "source": "USCGC Point Barnes (SISTER SHIP) main deck plan",
+ "beam_length_ratio": 0.21815,
+ "assumed_loa_ft": 82.0,
+ "derived_beam_ft": 17.89,
+ "max_beam_at_frac_from_stern": 0.385,
+ "px_per_ft": 101.46,
+ "half_breadths_ft": [
+  {
+   "frac_from_bow": 0.0,
+   "half_breadth_ft": 0.67
+  },
+  {
+   "frac_from_bow": 0.05,
+   "half_breadth_ft": 7.39
+  },
+  {
+   "frac_from_bow": 0.1,
+   "half_breadth_ft": 7.59
+  },
+  {
+   "frac_from_bow": 0.15,
+   "half_breadth_ft": 8.24
+  },
+  {
+   "frac_from_bow": 0.2,
+   "half_breadth_ft": 7.92
+  },
+  {
+   "frac_from_bow": 0.25,
+   "half_breadth_ft": 8.21
+  },
+  {
+   "frac_from_bow": 0.3,
+   "half_breadth_ft": 8.63
+  },
+  {
+   "frac_from_bow": 0.35,
+   "half_breadth_ft": 8.57
+  },
+  {
+   "frac_from_bow": 0.4,
+   "half_breadth_ft": 8.66
+  },
+  {
+   "frac_from_bow": 0.45,
+   "half_breadth_ft": 8.83
+  },
+  {
+   "frac_from_bow": 0.5,
+   "half_breadth_ft": 8.7
+  },
+  {
+   "frac_from_bow": 0.55,
+   "half_breadth_ft": 8.67
+  },
+  {
+   "frac_from_bow": 0.6,
+   "half_breadth_ft": 8.65
+  },
+  {
+   "frac_from_bow": 0.65,
+   "half_breadth_ft": 8.61
+  },
+  {
+   "frac_from_bow": 0.7,
+   "half_breadth_ft": 8.54
+  },
+  {
+   "frac_from_bow": 0.75,
+   "half_breadth_ft": 8.37
+  },
+  {
+   "frac_from_bow": 0.8,
+   "half_breadth_ft": 8.03
+  },
+  {
+   "frac_from_bow": 0.85,
+   "half_breadth_ft": 7.44
+  },
+  {
+   "frac_from_bow": 0.9,
+   "half_breadth_ft": 6.4
+  },
+  {
+   "frac_from_bow": 0.95,
+   "half_breadth_ft": 4.5
+  },
+  {
+   "frac_from_bow": 1.0,
+   "half_breadth_ft": 0.53
+  }
+ ],
+ "WARNING": "class geometry from a sister ship; validate against one physical beam measurement aboard Eris before use."
+}
