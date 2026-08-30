@@ -13,10 +13,13 @@ cycle an expedition vessel lives: multi-day offshore patrol in weather, with
 machinery redundancy a yacht of this size never gets. The conversion's
 existing features — crane-rated hydraulics, 440 V three-phase generation,
 fuel polishing, shallow draft — read like a small research vessel's spec
-sheet already. The limiting factors are range (coastal-expedition yes,
-ocean-crossing marginal until measured), accommodations (a layout question
-the decks drawing can answer), and the age of a 1960s steel hull (a survey
-question, not a paperwork one).
+sheet already. And it is genuinely efficient: **~47 ton-miles per gallon**,
+which is ship economics rather than yacht economics, and the single most
+important number for a vessel whose job is carrying things a long way. The
+limiting factors are absolute range (1,250 nm with reserve — coastal
+expedition yes, ocean crossing no without a leaner operating point),
+accommodations (a layout question the decks drawing can answer), and the age
+of a 1960s steel hull (a survey question, not a paperwork one).
 
 ## What the platform brings, from the record
 
@@ -71,6 +74,63 @@ BMS, is *already* a research platform in the instrumentation sense — and a
 floating lab for the owner's own teaching (IoT, data mining on live vessel
 telemetry, digital-twin coursework).
 
+## Efficiency: the platform's strongest single number
+
+Computed by `software/analysis/efficiency.py` from the reported cruise point
+(re-runnable when hull digitization supplies measured displacement and LWL):
+
+| Metric | Value |
+|---|---|
+| Transport efficiency | **0.69 nm/gal** (1.46 gal/nm) |
+| Ton-miles per gallon | **~47** (at ~69 LT class estimate) |
+| Fuel per ton-mile | 0.021 gal/(nm·LT) |
+| Cruise vs hull speed | **81 %** of hull speed, S/L ratio 1.09 |
+| Endurance | 145 h |
+
+**This is a genuinely efficient vessel, and the reason is design rather than
+restraint.** Three things compound:
+
+1. **The hull is easily driven.** A displacement hull's power demand climbs
+   steeply as it approaches hull speed. Cruising at 81 % of hull speed
+   (S/L 1.09) sits in the band where a long, fine displacement form is at
+   its best — fast enough to make passages, slow enough that wavemaking
+   has not yet begun to dominate. A planing hull of similar length burns
+   3–5× the fuel per mile to go twice as fast.
+2. **It carries its weight cheaply.** ~47 ton-miles per gallon is the number
+   that deserves attention. Moving 69 tons of steel, fuel, water, stores,
+   and science gear 47 miles on one gallon is *ship* efficiency, not yacht
+   efficiency — and it is the metric that matters for expedition work,
+   because expedition work means carrying things.
+3. **The mission it was designed for is the mission.** Long patrol legs at
+   economical speed with a small crew is precisely the duty cycle, so the
+   propeller, gearing, and hull form were optimized for exactly this
+   operating point rather than for a brochure top speed.
+
+### The corollary the twin should watch
+
+Backing out propulsion power from the burn: roughly **90–95 hp per engine**
+at cruise (assuming 4 gph of the 14 is house load and BSFC ≈ 0.38). Against
+the VT-1710's rating that is on the order of **10–15 % load** — and if
+anything the true figure is lower, since BSFC worsens at light load.
+
+That is wonderful for fuel and hard on diesels. Sustained very-light-load
+running is the classic recipe for wet stacking, cylinder glazing, and
+turbocharger fouling. Two things follow, both actionable:
+
+- **The EGT channels already in `schema/points.yaml` are the detector.**
+  Low or falling exhaust temperature at a given load is the wet-stacking
+  signature. This is the highest-value early instrumentation on the boat
+  after the BMS, and the schema is already shaped for it.
+- **Single-engine operation is the experiment worth running.** One engine
+  making the full ~190 hp sits at a far better point on its own BSFC curve
+  than two engines at 95 hp each, and eliminates one set of parasitic
+  losses. Trawler practice suggests 20–30 % savings, which would put cruise
+  near 10–11 gph and range near 1,800 nm — with the asymmetric-drag penalty
+  as the counterweight. **This is precisely the question a digital twin
+  exists to answer**, and it needs only the fuel-flow channels already
+  planned. Run it as a proper A/B at fixed speed and it is a publishable
+  result on a hull class with a real service history.
+
 ## Range: owner-reported operating point
 
 **9.6 kt at 14 gph combined (both mains plus house load); range about
@@ -121,9 +181,11 @@ data-systems lab — Eris is not merely viable; the platform is close to
 purpose-shaped, and the missing pieces (crane reinstatement, ground-fault
 monitor, watermaker, accommodations layout) are ordinary refit items, not
 structural surgery. As an **ocean-crossing expedition vessel**, the honest
-answer is: measure the burn, digitize the hull, survey the plating, and
-revisit — the range table above says the door is open at the low-burn end,
-and sail-assist could hold it open.
+answer is: 1,250 nm with reserve does not cross oceans today, but the
+efficiency analysis says the door is not closed — single-engine operation,
+a slower economical speed, and sail-assist are three independent levers on
+the same number, and all three are *measurable* with instrumentation already
+planned. Digitize the hull, survey the plating, run the A/B, and revisit.
 
 The next three roadmap items are exactly the three measurements this
 assessment is waiting on: fuel flow (range), hull digitization
