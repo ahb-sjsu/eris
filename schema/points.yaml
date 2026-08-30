@@ -1,0 +1,76 @@
+# Eris telemetry point schema, v0.1
+# Formalized from yacht/data-model.txt (author's hand list, 2021-2025 era).
+# Path convention follows Signal K where a standard path exists; custom paths
+# are marked. Units are the wire units; display conversion is the dashboard's
+# job. Engine/genset models deliberately unstated pending confirmation from
+# the vessel (do not guess into this file).
+#
+# vessel: Eris, ex-USCG Point-class cutter, 82 ft
+# sister-ship drawing set: USCGC Point Barnes (drawings/)
+
+defaults:
+  sample_interval_s: 2
+  history: victoriametrics
+  transport: TBD   # candidates: NMEA2000 -> Signal K server -> VM remote-write
+
+templates:
+  diesel_common: &diesel_common
+    fuelSolenoid:        {type: bool,  desc: fuel solenoid energized}
+    fuelPressure:        {unit: Pa,    desc: fuel oil pressure}
+    rawWaterInletTemp:   {unit: K,     desc: raw water inlet temp}
+    rawWaterExhaustTemp: {unit: K,     desc: raw water temp at exhaust mixer}
+    rawWaterPumpRpm:     {unit: rpm}
+    rawWaterPressure:    {unit: Pa}
+    freshWaterTemp:      {unit: K,     desc: jacket water temp}
+    freshWaterPumpRpm:   {unit: rpm}
+    freshWaterPressure:  {unit: Pa}
+    lubeOilPressure:     {unit: Pa}
+    rpm:                 {unit: rpm}
+    alternatorVolts:     {unit: V}
+    alternatorAmps:      {unit: A}
+    hours:               {unit: h,     desc: running hours counter}
+
+points:
+  propulsion:
+    port: &main_engine
+      <<: *diesel_common
+      egt:
+        left:  {unit: K, desc: exhaust gas temp, left bank}
+        right: {unit: K, desc: exhaust gas temp, right bank}
+      turboBoost:
+        1: {unit: Pa}
+        2: {unit: Pa}
+      transmissionOilPressure: {unit: Pa, desc: Twin Disc gear oil pressure (HP9400/HP10500 manuals in docs/)}
+      shaftRpm: {unit: rpm, desc: shaft tach after reduction}
+    starboard: *main_engine
+
+  electrical:
+    generators:
+      "1": &genset
+        <<: *diesel_common
+        egt:
+          left:  {unit: K}
+          right: {unit: K}
+        acVoltsPerPhase: {unit: V, dims: [phase]}
+        acAmpsPerPhase:  {unit: A, dims: [phase]}
+        frequency:       {unit: Hz}
+      "2": *genset
+
+  ventilation:
+    engineRoom:
+      port: &er_fan
+        amps:    {unit: A}
+        rpm:     {unit: rpm}
+        airflow: {unit: cfm, custom: true}
+      starboard: *er_fan
+
+# --- known gaps, to be specified from the vessel (not invented here) ---
+# tanks: fuel (n?), fresh water, black/gray -- levels + polishing loop state
+#   (see process/fuel_polishing_bpmn.xml for the polishing procedure)
+# electrical: battery banks, chargers/inverters, shore power, solar
+#   (yacht/solar-plan.txt is currently empty)
+# navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
+#   with any N2K gateway
+# bilge: pump states, float switches, cycle counters
+# steering/leeboards: the active leeboard system (yacht/leeboard_blueprint_v1)
+#   will need position + load channels once built

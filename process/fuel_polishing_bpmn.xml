@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://example.com/fuel-polishing">
+  <process id="FuelPolishingProcess" name="Eris Fuel Polishing System" isExecutable="false">
+    <startEvent id="StartEvent" name="Start Polishing" />
+    <task id="OpenValves" name="Open Suction and Discharge Valves" />
+    <task id="PowerOnCart" name="Power On Polishing Cart" />
+    <exclusiveGateway id="PrimedGateway" name="Fuel Primed?" />
+    <task id="BleedAir" name="Open Bypass and Bleed Air" />
+    <task id="RunPumps" name="Run Pumps" />
+    <subProcess id="FiltrationStage" name="Filtration Process">
+      <task id="Strainer100um" name="100 µm Coarse Strainer" />
+      <task id="Primary30um" name="30 µm Primary Filter Bank (R18189-30)" />
+      <task id="Secondary10um" name="10 µm Secondary Filter Bank (R12T Array)" />
+      <task id="Final2um" name="2 µm Final Filter (Cim-Tek 250AE-02)" />
+    </subProcess>
+    <task id="CheckGauges" name="Check Pressure/Vacuum Gauges" />
+    <exclusiveGateway id="PressureCheck" name="Pressure/Vacuum Within Limits?" />
+    <task id="ContinuePolishing" name="Continue Polishing" />
+    <task id="ReplaceFilters" name="Stop and Replace Filters" />
+    <task id="RecordReadings" name="Record Pressure/Vacuum Readings" />
+    <task id="Shutdown" name="Stop Pumps and Close Valves" />
+    <endEvent id="EndEvent" name="Polishing Complete" />
+
+    <!-- Sequence flows -->
+    <sequenceFlow id="flow1" sourceRef="StartEvent" targetRef="OpenValves" />
+    <sequenceFlow id="flow2" sourceRef="OpenValves" targetRef="PowerOnCart" />
+    <sequenceFlow id="flow3" sourceRef="PowerOnCart" targetRef="PrimedGateway" />
+    <sequenceFlow id="flow4" sourceRef="PrimedGateway" targetRef="BleedAir" name="No" />
+    <sequenceFlow id="flow5" sourceRef="BleedAir" targetRef="RunPumps" name="After Bleed" />
+    <sequenceFlow id="flow6" sourceRef="PrimedGateway" targetRef="RunPumps" name="Yes" />
+    <sequenceFlow id="flow7" sourceRef="RunPumps" targetRef="FiltrationStage" />
+    <sequenceFlow id="flow8" sourceRef="FiltrationStage" targetRef="CheckGauges" />
+    <sequenceFlow id="flow9" sourceRef="CheckGauges" targetRef="PressureCheck" />
+    <sequenceFlow id="flow10" sourceRef="PressureCheck" targetRef="ReplaceFilters" name="No" />
+    <sequenceFlow id="flow11" sourceRef="PressureCheck" targetRef="ContinuePolishing" name="Yes" />
+    <sequenceFlow id="flow12" sourceRef="ContinuePolishing" targetRef="RecordReadings" />
+    <sequenceFlow id="flow13" sourceRef="RecordReadings" targetRef="Shutdown" />
+    <sequenceFlow id="flow14" sourceRef="Shutdown" targetRef="EndEvent" />
+  </process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_FuelPolishing">
+    <bpmndi:BPMNPlane id="BPMNPlane_FuelPolishing" bpmnElement="FuelPolishingProcess">
+      <!-- Shapes -->
+      <bpmndi:BPMNShape id="StartEventShape" bpmnElement="StartEvent">
+        <dc:Bounds x="100" y="100" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="OpenValvesShape" bpmnElement="OpenValves">
+        <dc:Bounds x="200" y="90" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PowerOnCartShape" bpmnElement="PowerOnCart">
+        <dc:Bounds x="360" y="90" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PrimedGatewayShape" bpmnElement="PrimedGateway">
+        <dc:Bounds x="520" y="100" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BleedAirShape" bpmnElement="BleedAir">
+        <dc:Bounds x="600" y="180" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RunPumpsShape" bpmnElement="RunPumps">
+        <dc:Bounds x="700" y="90" width="120" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="FiltrationStageShape" bpmnElement="FiltrationStage">
+        <dc:Bounds x="860" y="80" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CheckGaugesShape" bpmnElement="CheckGauges">
+        <dc:Bounds x="1050" y="90" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PressureCheckShape" bpmnElement="PressureCheck">
+        <dc:Bounds x="1220" y="100" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ContinuePolishingShape" bpmnElement="ContinuePolishing">
+        <dc:Bounds x="1310" y="90" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ReplaceFiltersShape" bpmnElement="ReplaceFilters">
+        <dc:Bounds x="1310" y="190" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="RecordReadingsShape" bpmnElement="RecordReadings">
+        <dc:Bounds x="1480" y="90" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ShutdownShape" bpmnElement="Shutdown">
+        <dc:Bounds x="1650" y="90" width="140" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEventShape" bpmnElement="EndEvent">
+        <dc:Bounds x="1820" y="100" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <!-- Edges -->
+      <bpmndi:BPMNEdge id="Edge_flow1" bpmnElement="flow1">
+        <di:waypoint x="136" y="118" />
+        <di:waypoint x="200" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow2" bpmnElement="flow2">
+        <di:waypoint x="320" y="120" />
+        <di:waypoint x="360" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow3" bpmnElement="flow3">
+        <di:waypoint x="480" y="120" />
+        <di:waypoint x="520" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow4" bpmnElement="flow4">
+        <di:waypoint x="545" y="150" />
+        <di:waypoint x="600" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow6" bpmnElement="flow6">
+        <di:waypoint x="570" y="120" />
+        <di:waypoint x="700" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow7" bpmnElement="flow7">
+        <di:waypoint x="820" y="120" />
+        <di:waypoint x="860" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow8" bpmnElement="flow8">
+        <di:waypoint x="1020" y="120" />
+        <di:waypoint x="1050" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow9" bpmnElement="flow9">
+        <di:waypoint x="1190" y="120" />
+        <di:waypoint x="1220" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow11" bpmnElement="flow11">
+        <di:waypoint x="1270" y="120" />
+        <di:waypoint x="1310" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow12" bpmnElement="flow12">
+        <di:waypoint x="1450" y="120" />
+        <di:waypoint x="1480" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow13" bpmnElement="flow13">
+        <di:waypoint x="1620" y="120" />
+        <di:waypoint x="1650" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_flow14" bpmnElement="flow14">
+        <di:waypoint x="1790" y="120" />
+        <di:waypoint x="1820" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
