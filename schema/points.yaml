@@ -91,6 +91,23 @@ points:
         <<: *tank
         capacity_gal: 1500
 
+    dc:
+      # starting banks (owner-confirmed 2026-08-30): 2x12V truck batteries
+      # in series per bank, 24V nominal. Three banks: one per main, one
+      # shared by both generators.
+      startBanks:
+        mainPort: &start_bank
+          nominal_v: 24
+          arrangement: 2x12V series, truck batteries
+          points:
+            voltage: {unit: V}
+            current: {unit: A, sensed: false, desc: candidate shunt}
+        mainStarboard: *start_bank
+        generators:
+          <<: *start_bank
+          note: shared by generators 1 and 2
+      # house/domestic DC, chargers, shore power, solar: still gaps below
+
   ventilation:
     engineRoom:
       port: &er_fan
@@ -153,13 +170,12 @@ hydraulics:
     transomCrane: {status: removed, note: removed by the Navy; plumbing may remain}
 
 # --- known gaps, to be specified from the vessel (not invented here) ---
+# electrical.dc: house bank (exists?), chargers, shore power, solar
 # tanks: black/gray water capacities; fuel plumbing topology (wing->day
 #   transfer path, polishing loop valve lineup); sender types per tank
 # firePump: motor rating; whether discharge pressure gets a sender
 # hydraulics: pump driver (electric vs PTO) and rating; whether crane
 #   circuit plumbing survives in the lazarette
-# electrical: battery banks, chargers/inverters, shore power, solar
-#   (yacht/solar-plan.txt is currently empty)
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
 #   with any N2K gateway
 # bilge: pump states, float switches, cycle counters
