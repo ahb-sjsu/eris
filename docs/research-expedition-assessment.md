@@ -71,28 +71,28 @@ BMS, is *already* a research platform in the instrumentation sense — and a
 floating lab for the owner's own teaching (IoT, data mining on live vessel
 telemetry, digital-twin coursework).
 
-## Range: the honest number is parametric until measured
+## Range: owner-reported operating point
 
-Recorded fuel: 2,026 gal total (2×920 wing + 186 day). Range depends on
-combined burn at cruise, which this repo does not yet know. Parametrically,
-at displacement cruise (call it 9 kt) with a 10 % reserve:
+**9.6 kt at 14 gph combined (both mains plus house load); range about
+1,500 nm** (owner, 2026-08-30). Cross-check against recorded tankage:
+2,026 gal / 14 gph = 145 h → ~1,390 nm zero-reserve, ~1,250 nm holding a
+10 % reserve — consistent with 1,500 as the round no-reserve figure.
 
-| Combined burn (gph) | Endurance (h) | Range (nm @ 9 kt) |
-|---|---|---|
-| 8  | 228 | ~2,050 |
-| 12 | 152 | ~1,370 |
-| 16 | 114 | ~1,025 |
-| 20 | 91  | ~820   |
+Practical planning number: **call it 1,200–1,300 nm between fuel docks with
+seamanlike reserve.** That settles the mission envelope:
 
-Reading: **coastal expedition (Inside Passage, Baja, Caribbean chains,
-Great Loop) is comfortably in reach on any plausible burn; transoceanic legs
-are not, without either a measured low burn at slow cruise or auxiliary
-propulsion.** Two notes from the record: the engine-room notes already
-link a fuel-flow sensor — the twin's fuel-flow channels turn this table
-into one measured number. And the active-leeboard project plus the stepped
-masts suggest sail-assist is already contemplated; measured motorsailing
-burn reduction would extend range materially *and* is a publishable
-experiment in its own right on a hull like this.
+- **Comfortably in reach:** the entire Pacific coast in legs (San
+  Francisco–Alaska via the Inside Passage, San Francisco–Baja–Sea of
+  Cortez), Caribbean chains, Great Loop — all with margin.
+- **Reachable with planning:** Hawaii is ~2,100 nm from the Bay — out of
+  range on the mains alone. Long open-water legs need either a slower/
+  leaner operating point (the twin's fuel-flow channels will map the burn
+  curve; 14 gph at 9.6 kt suggests meaningful savings at 8 kt) or
+  sail-assist.
+- The active-leeboard project plus the stepped masts suggest sail-assist is
+  already contemplated; a measured motorsailing burn reduction would extend
+  range materially *and* is a publishable experiment in its own right on a
+  hull like this.
 
 ## What the record does not yet support
 

@@ -126,6 +126,17 @@ points:
         airflow: {unit: cfm, custom: true}
       starboard: *er_fan
 
+# --- performance (owner-reported 2026-08-30) ---
+performance:
+  cruise:
+    speed_kts: 9.6
+    burn_gph_combined: 14   # both mains + house load
+    range_nm_reported: 1500  # owner's figure, "about"
+    # arithmetic cross-check on recorded tankage: 2,026 gal / 14 gph =
+    # 144.7 h; x 9.6 kt = ~1,390 nm zero-reserve, ~1,250 nm with 10%.
+    # Consistent with "about 1,500" as a round no-reserve figure. The
+    # twin's fuel-flow channels will refine this to a measured curve.
+
 # --- raw water topology (owner-confirmed 2026-08-30) ---
 # Not telemetry points per se; the physical arrangement the points hang off.
 topology:
