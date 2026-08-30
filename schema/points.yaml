@@ -80,8 +80,18 @@ points:
           nominal_v: 24
           arrangement: 2x12V series, truck batteries
           points:
-            voltage: {unit: V}
-            current: {unit: A, sensed: false, desc: candidate shunt}
+            voltage:  {unit: V}
+            midpoint: {unit: V, sensed: false, desc: 12V tap between the
+              series pair; divergence from V/2 reveals one battery failing
+              inside a healthy-looking 24V (software/bms IMBALANCE rule)}
+            current:  {unit: A, sensed: false, desc: candidate shunt}
+            temp:     {unit: K, sensed: false, desc: battery box; sag
+              thresholds are temp-relative}
+          derived:   # computed by software/bms, published back to Signal K
+            soc:            {unit: ratio, from: rested OCV table}
+            crankingMinV:   {unit: V, from: 10 Hz capture per start event}
+            alarms:         {codes: [LOW_VOLTS, SAG_TREND, IMBALANCE,
+                                     CHARGE_FAIL]}
         mainStarboard: *start_bank
         generators:
           <<: *start_bank
