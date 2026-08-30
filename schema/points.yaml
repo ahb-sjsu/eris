@@ -148,7 +148,13 @@ hull:
     across 77-79 ft, Fn stays 0.321-0.326, hull speed 11.8-11.9 kt, and the
     stern-lift-device threshold 11.8-11.9 kt. Every conclusion holds.
     nm/gal, ton-miles/gal and endurance do not depend on LWL at all.
-  still_open: draft, trim, displacement
+  draft_ft: 6          # about; owner aboard 2026-08-30, load state not recorded
+  still_open: >
+    trim and displacement. Freeboard survey is the path (see
+    docs/freeboard-survey.md): drawings give sections above baseline,
+    freeboard locates the real waterline against them, integration gives
+    displacement and LCB for a known load state. Replaces the 69 LT class
+    estimate the efficiency analysis currently uses.
 
 # --- performance (owner-reported 2026-08-30) ---
 performance:
