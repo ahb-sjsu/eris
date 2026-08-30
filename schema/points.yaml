@@ -127,6 +127,19 @@ points:
         airflow: {unit: cfm, custom: true}
       starboard: *er_fan
 
+# --- hull (measured / derived 2026-08-30) ---
+hull:
+  beam_measured_in: 204          # just aft of the pilothouse, owner aboard
+  beam_max_ft_calibrated: 17.53  # Barnes drawings scaled by 0.980
+  max_beam_station: 0.39 forward of transom, as fraction of length
+  validation: >
+    The 204 in measurement agrees with the Point Barnes deck plan to within
+    2% across the whole midship region -- a systematic offset, not scatter,
+    and the size of the ink line width at the drawing's 101.5 px/ft. THE
+    DRAWINGS DESCRIBE ERIS. The whole Barnes set is now usable as a model,
+    scaled by 0.980, rather than as a loose reference.
+  still_open: LWL (every efficiency number assumes 78 ft), draft, trim
+
 # --- performance (owner-reported 2026-08-30) ---
 performance:
   cruise:

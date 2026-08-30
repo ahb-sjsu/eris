@@ -7,89 +7,124 @@
  "px_per_ft": 101.46,
  "half_breadths_ft": [
   {
-   "frac_from_bow": 0.0,
-   "half_breadth_ft": 0.67
+   "half_breadth_ft": 0.67,
+   "frac_from_stern": 0.0,
+   "half_breadth_ft_calibrated": 0.66
   },
   {
-   "frac_from_bow": 0.05,
-   "half_breadth_ft": 7.39
+   "half_breadth_ft": 7.39,
+   "frac_from_stern": 0.05,
+   "half_breadth_ft_calibrated": 7.24
   },
   {
-   "frac_from_bow": 0.1,
-   "half_breadth_ft": 7.59
+   "half_breadth_ft": 7.59,
+   "frac_from_stern": 0.1,
+   "half_breadth_ft_calibrated": 7.44
   },
   {
-   "frac_from_bow": 0.15,
-   "half_breadth_ft": 8.24
+   "half_breadth_ft": 8.24,
+   "frac_from_stern": 0.15,
+   "half_breadth_ft_calibrated": 8.08
   },
   {
-   "frac_from_bow": 0.2,
-   "half_breadth_ft": 7.92
+   "half_breadth_ft": 7.92,
+   "frac_from_stern": 0.2,
+   "half_breadth_ft_calibrated": 7.76
   },
   {
-   "frac_from_bow": 0.25,
-   "half_breadth_ft": 8.21
+   "half_breadth_ft": 8.21,
+   "frac_from_stern": 0.25,
+   "half_breadth_ft_calibrated": 8.05
   },
   {
-   "frac_from_bow": 0.3,
-   "half_breadth_ft": 8.63
+   "half_breadth_ft": 8.63,
+   "frac_from_stern": 0.3,
+   "half_breadth_ft_calibrated": 8.46
   },
   {
-   "frac_from_bow": 0.35,
-   "half_breadth_ft": 8.57
+   "half_breadth_ft": 8.57,
+   "frac_from_stern": 0.35,
+   "half_breadth_ft_calibrated": 8.4
   },
   {
-   "frac_from_bow": 0.4,
-   "half_breadth_ft": 8.66
+   "half_breadth_ft": 8.66,
+   "frac_from_stern": 0.4,
+   "half_breadth_ft_calibrated": 8.49
   },
   {
-   "frac_from_bow": 0.45,
-   "half_breadth_ft": 8.83
+   "half_breadth_ft": 8.83,
+   "frac_from_stern": 0.45,
+   "half_breadth_ft_calibrated": 8.65
   },
   {
-   "frac_from_bow": 0.5,
-   "half_breadth_ft": 8.7
+   "half_breadth_ft": 8.7,
+   "frac_from_stern": 0.5,
+   "half_breadth_ft_calibrated": 8.53
   },
   {
-   "frac_from_bow": 0.55,
-   "half_breadth_ft": 8.67
+   "half_breadth_ft": 8.67,
+   "frac_from_stern": 0.55,
+   "half_breadth_ft_calibrated": 8.5
   },
   {
-   "frac_from_bow": 0.6,
-   "half_breadth_ft": 8.65
+   "half_breadth_ft": 8.65,
+   "frac_from_stern": 0.6,
+   "half_breadth_ft_calibrated": 8.48
   },
   {
-   "frac_from_bow": 0.65,
-   "half_breadth_ft": 8.61
+   "half_breadth_ft": 8.61,
+   "frac_from_stern": 0.65,
+   "half_breadth_ft_calibrated": 8.44
   },
   {
-   "frac_from_bow": 0.7,
-   "half_breadth_ft": 8.54
+   "half_breadth_ft": 8.54,
+   "frac_from_stern": 0.7,
+   "half_breadth_ft_calibrated": 8.37
   },
   {
-   "frac_from_bow": 0.75,
-   "half_breadth_ft": 8.37
+   "half_breadth_ft": 8.37,
+   "frac_from_stern": 0.75,
+   "half_breadth_ft_calibrated": 8.2
   },
   {
-   "frac_from_bow": 0.8,
-   "half_breadth_ft": 8.03
+   "half_breadth_ft": 8.03,
+   "frac_from_stern": 0.8,
+   "half_breadth_ft_calibrated": 7.87
   },
   {
-   "frac_from_bow": 0.85,
-   "half_breadth_ft": 7.44
+   "half_breadth_ft": 7.44,
+   "frac_from_stern": 0.85,
+   "half_breadth_ft_calibrated": 7.29
   },
   {
-   "frac_from_bow": 0.9,
-   "half_breadth_ft": 6.4
+   "half_breadth_ft": 6.4,
+   "frac_from_stern": 0.9,
+   "half_breadth_ft_calibrated": 6.27
   },
   {
-   "frac_from_bow": 0.95,
-   "half_breadth_ft": 4.5
+   "half_breadth_ft": 4.5,
+   "frac_from_stern": 0.95,
+   "half_breadth_ft_calibrated": 4.41
   },
   {
-   "frac_from_bow": 1.0,
-   "half_breadth_ft": 0.53
+   "half_breadth_ft": 0.53,
+   "frac_from_stern": 1.0,
+   "half_breadth_ft_calibrated": 0.52
   }
  ],
- "WARNING": "class geometry from a sister ship; validate against one physical beam measurement aboard Eris before use."
+ "WARNING": "Barnes geometry, VALIDATED against one measurement aboard Eris (204 in, 2026-08-30) and scaled by calibration_factor. Use the *_calibrated values.",
+ "validation": {
+  "date": "2026-08-30",
+  "measured_on_eris_in": 204.0,
+  "location": "just aft of the pilothouse (owner, aboard)",
+  "assumed_station_band_from_stern": [
+   0.5,
+   0.6
+  ],
+  "drawing_value_ft_at_band": 17.35,
+  "calibration_factor": 0.98,
+  "interpretation": "Drawing reads systematically high by ~2%, consistent across the whole midship region. At 101.5 px/ft a drawn line of 10-15 px is 1.2-1.8 in per side, so tracing the OUTER edge of both sides inflates every breadth by roughly 3 in. That is the discrepancy. CONCLUSION: the Point Barnes drawings do describe Eris; the transfer is validated and now calibrated.",
+  "residual_uncertainty": "The exact station of the 204 in measurement is bracketed, not pinned. Distance from transom (or bow) to the measurement point would tighten the factor."
+ },
+ "derived_beam_ft_calibrated": 17.53
 }
