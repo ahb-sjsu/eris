@@ -71,6 +71,26 @@ points:
         frequency:         {unit: Hz}
       "2": *genset
 
+  tanks:
+    # capacities owner-confirmed 2026-08-30; plumbing topology (what feeds
+    # what, transfer/polishing valve lineup) not yet recorded -- see
+    # process/fuel_polishing_bpmn.xml for the polishing loop itself
+    fuel:
+      wingPort:      &tank
+        capacity_gal: 920
+        level:  {unit: ratio, desc: 0..1 of capacity}
+        volume: {unit: gal,   desc: derived from level x capacity}
+      wingStarboard:
+        <<: *tank
+        capacity_gal: 920
+      day:
+        <<: *tank
+        capacity_gal: 186
+    freshWater:
+      main:
+        <<: *tank
+        capacity_gal: 1500
+
   ventilation:
     engineRoom:
       port: &er_fan
@@ -80,8 +100,8 @@ points:
       starboard: *er_fan
 
 # --- known gaps, to be specified from the vessel (not invented here) ---
-# tanks: fuel (n?), fresh water, black/gray -- levels + polishing loop state
-#   (see process/fuel_polishing_bpmn.xml for the polishing procedure)
+# tanks: black/gray water capacities; fuel plumbing topology (wing->day
+#   transfer path, polishing loop valve lineup); sender types per tank
 # electrical: battery banks, chargers/inverters, shore power, solar
 #   (yacht/solar-plan.txt is currently empty)
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
