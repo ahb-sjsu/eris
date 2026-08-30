@@ -99,9 +99,27 @@ points:
         airflow: {unit: cfm, custom: true}
       starboard: *er_fan
 
+# --- raw water topology (owner-confirmed 2026-08-30) ---
+# Not telemetry points per se; the physical arrangement the points hang off.
+topology:
+  rawWater:
+    seaChests:
+      mainPort:      {serves: [propulsion.port],      strainers: duplex per consumer}
+      mainStarboard: {serves: [propulsion.starboard], strainers: duplex per consumer}
+      auxiliary:
+        serves: [electrical.generators.1, electrical.generators.2, firePump]
+        note: shared chest; each consumer has its own duplex strainer
+    # candidate future channels, NOT yet sensed: strainer differential
+    # pressure or vacuum per duplex basket -- the standard early-warning
+    # for fouling. Decide per-consumer when specifying senders.
+
+# firePump: exists (auxiliary sea chest consumer). Points TBD from the
+# vessel: driver type (electric/engine), discharge pressure, run state.
+
 # --- known gaps, to be specified from the vessel (not invented here) ---
 # tanks: black/gray water capacities; fuel plumbing topology (wing->day
 #   transfer path, polishing loop valve lineup); sender types per tank
+# firePump: driver, rating, discharge pressure sensing
 # electrical: battery banks, chargers/inverters, shore power, solar
 #   (yacht/solar-plan.txt is currently empty)
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
