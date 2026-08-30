@@ -125,10 +125,39 @@ firePump:
     amps:              {unit: A}
     dischargePressure: {unit: Pa, sensed: false, desc: candidate sensor}
 
+# --- hydraulic system (owner-confirmed 2026-08-30) ---
+# A departure from the class baseline, like the leeboards.
+hydraulics:
+  powerUnit:
+    location: lazarette
+    note: >
+      Large pump, originally sized to also power a transom crane that the
+      Navy removed. The steering+windlass load alone therefore runs well
+      inside the pump's envelope -- and that headroom is standing capacity
+      for future hydraulic consumers (crane replacement, leeboard actuation?).
+    driver: TBD   # electric or engine PTO -- from the vessel, not guessed
+    points:
+      pressure:       {unit: Pa,    sensed: false, desc: candidate sender}
+      oilTemp:        {unit: K,     sensed: false, desc: candidate sender}
+      reservoirLevel: {unit: ratio, sensed: false, desc: candidate sender}
+  consumers:
+    steering:
+      desc: hydraulic power steering
+      points:
+        rudderAngle: {unit: rad, desc: standard Signal K steering.rudderAngle}
+    windlass:
+      location: bow
+      points:
+        runState:  {type: bool, sensed: false}
+        chainOut:  {unit: m,    sensed: false, desc: candidate chain counter}
+    transomCrane: {status: removed, note: removed by the Navy; plumbing may remain}
+
 # --- known gaps, to be specified from the vessel (not invented here) ---
 # tanks: black/gray water capacities; fuel plumbing topology (wing->day
 #   transfer path, polishing loop valve lineup); sender types per tank
 # firePump: motor rating; whether discharge pressure gets a sender
+# hydraulics: pump driver (electric vs PTO) and rating; whether crane
+#   circuit plumbing survives in the lazarette
 # electrical: battery banks, chargers/inverters, shore power, solar
 #   (yacht/solar-plan.txt is currently empty)
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free
