@@ -71,6 +71,23 @@ points:
         frequency:         {unit: Hz}
       "2": *genset
 
+    dc:
+      # starting banks (owner-confirmed 2026-08-30): 2x12V truck batteries
+      # in series per bank, 24V nominal. Three banks: one per main, one
+      # shared by both generators.
+      startBanks:
+        mainPort: &start_bank
+          nominal_v: 24
+          arrangement: 2x12V series, truck batteries
+          points:
+            voltage: {unit: V}
+            current: {unit: A, sensed: false, desc: candidate shunt}
+        mainStarboard: *start_bank
+        generators:
+          <<: *start_bank
+          note: shared by generators 1 and 2
+      # house/domestic DC, chargers, shore power, solar: still gaps below
+
   tanks:
     # capacities owner-confirmed 2026-08-30; plumbing topology (what feeds
     # what, transfer/polishing valve lineup) not yet recorded -- see
@@ -90,23 +107,6 @@ points:
       main:
         <<: *tank
         capacity_gal: 1500
-
-    dc:
-      # starting banks (owner-confirmed 2026-08-30): 2x12V truck batteries
-      # in series per bank, 24V nominal. Three banks: one per main, one
-      # shared by both generators.
-      startBanks:
-        mainPort: &start_bank
-          nominal_v: 24
-          arrangement: 2x12V series, truck batteries
-          points:
-            voltage: {unit: V}
-            current: {unit: A, sensed: false, desc: candidate shunt}
-        mainStarboard: *start_bank
-        generators:
-          <<: *start_bank
-          note: shared by generators 1 and 2
-      # house/domestic DC, chargers, shore power, solar: still gaps below
 
   ventilation:
     engineRoom:
