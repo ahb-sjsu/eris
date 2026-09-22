@@ -135,7 +135,7 @@ P06,spares,UCC21520,,,4,1,4,ELECTRONICS,,13.32,13.32,QUOTE,
 P07,spares,H1Z2Z2-K 6 mm2,,generic,20 m,1,20 m,COMMODITY,,22.00,23.00,EST (research),as D01
 # TEST EQUIPMENT + SAFETY (if not already owned),,,,,,,,,,,,,
 T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",OWNED: 2x Sorensen DCS60-18E,1,1,1,OWNER BENCH,series = 120 V/18 A covers 4S; check DCS max output float vs chassis before series; add series R for a sloped I-V curve,0.00,0.00,OWNED,
-T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,BUY (not on bench),IM bench before the pack,699.00,699.00,BUDGET OPTION,ETOMMENS eTM-6002
+T02,test,HV bench source (RM in bench CV mode),"proven RM, spec 5.3; output cap bank >=100 uF >=500 V + bleeder (<50 V in 60 s) + bench jumper/enable switch + bench PoE injector",2x 1200 uF 450 V in series (as I08) + bleeder resistors,1,1,1,BUILD,replaces a $699 600 V supply; ~1 kW limit is enough for IM bring-up; full power on the pack,30.00,80.00,EST (mine),caps as I08; injector as S06
 T03,test,DC load bank (DIY),"4x 240 V 1500 W water-heater elements in series (~38 Ohm each, ~154 Ohm total: ~800 W at 350 V), taps via DC isolators",generic water-heater elements + non-conductive tub + 2x 1000 V DC isolator + 10x38 gPV fuse/holder,1,1,1,BUILD,RM output bench load; elements run ~200 W each (cool); sheaths bonded to ground; DC-rated switching only,100.00,200.00,EST (mine),elements ~$15 ea; isolators as C05; fuse as C04
 T04,test,Oscilloscope,"4-ch, >=200 MHz",OWNED: Tektronix DPO,1,1,1,OWNER BENCH,,0.00,0.00,OWNED,
 T05,test,HV differential probes,>=1.5 kV,generic,2,1,2,BUY (not on bench),never ground-clip a floating HV node,710.00,710.00,BUDGET OPTION,2x Micsig DP1500
@@ -145,3 +145,4 @@ T08,test,Insulation tester,1000 V,generic,1,1,1,BUY (not on bench),,184.10,184.1
 T09,test,HV gloves + protectors,Class 0 (1000 V) + leather,generic,1,1,1,BUY (not on bench),test before each use,165.00,165.00,BUDGET OPTION,Salisbury GK011R
 T10,test,Face shield + LOTO kit,,generic,1,1,1,BUY (not on bench),,196.00,196.00,BUDGET OPTION,LOTO + arc shield
 T11,test,DC load chopper (optional),PWM switch in series with T03 for CC/CR/sweep: SiC MOSFET + UCC21520 + shunt + input caps + freewheel diode,C3M0075120D + UCC21520 + extra LaunchPad (as I02/I03/I01),1,1,1,BUILD,optional; turns T03 into a programmable load,0.00,200.00,EST (mine),reuses IM parts
+T12,test,Mains HV supply (optional backup),240 V variac -> 240/480 V control transformer (isolation) -> bridge -> caps + bleeder; series R current limit; variac stop below 450 V DC,used variac + dry-type 240x480 transformer,1,1,1,BUILD,BACKUP ONLY: mains-connected HV; not planned,0.00,350.00,EST (mine),used-market estimate

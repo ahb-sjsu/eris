@@ -163,6 +163,27 @@ On every control cycle, the output current command is the **minimum** of:
 **reduce** power. Nothing on the network can command more than the module's
 local limits.
 
+### 5.3 Bench constant-voltage mode (bench use only) [DECISION]
+
+A proven RM doubles as the bench **high-voltage source** for bringing up the
+inverter modules (Phase 1 LLD §10). No separate HV supply is bought.
+
+- **What it does:** regulates its *output voltage* to a setpoint (250–420 V)
+  instead of tracking MPP. The current limit is the module's local limit
+  (4 A) and the input supply's CC setting (2× Sorensen DCS60-18E in
+  series, 120 V / 18 A). Capacity is ~1 kW.
+- **Output stiffness:** an external capacitor bank (≥ 100 µF, ≥ 500 V, with a
+  **bleeder** that takes it below 50 V within 60 s) at the output terminals.
+- **Enable:** only with the **bench jumper** fitted *and* the bench-mode
+  config bit set. With the jumper fitted, the module refuses the
+  supervisor's heartbeat and Modbus writes, so it **cannot join the
+  vessel's bus**. The supervisor, in turn, alarms on and ignores any module
+  reporting bench mode. Aboard, the jumper is not fitted.
+- **Heartbeat:** replaced by the local enable (the jumper plus a bench
+  enable switch). PoE still powers gate drive, from a bench PoE injector,
+  so pulling PoE still stops it.
+- **Protections:** unchanged (section 7). Output OV stays at 425 V.
+
 ### 5.2 Controller [DECISION]
 
 - A real-time MCU for the power loops. TI C2000 class (e.g. F28003x or F28P65x)
@@ -389,7 +410,8 @@ fallback.
 | Phase | Setup | Pass criteria |
 |---|---|---|
 | P0 | LLC-DCX alone: DC supply in, resistive load out, **reduced voltage first** (e.g. 30 V in) | ratio holds 1:2.8 under load; ZVS confirmed on scope; efficiency ≥ 96 % at full voltage |
-| P1 | Full module: PV simulator (programmable supply with an I-V curve) in, HV electronic load or battery emulator out | MPPT tracks ≥ 99 % of simulator MPP; every section-7 fault fires when injected, **and the right one fires** |
+| P1 | Full module: PV simulator (2× Sorensen DCS60-18E in series, with a series resistor for a sloped I-V curve) in, DIY water-heater load bank out | MPPT tracks ≥ 99 % of simulator MPP; every section-7 fault fires when injected, **and the right one fires** |
+| P1b | Bench CV mode (section 5.3): capacitor bank + bleeder on the output, load bank stepped | output holds setpoint ±1 % from 0 to 1 kW; the bench jumper blocks heartbeat and Modbus writes; pulling PoE stops it |
 | P2 | One module on 4 real panels, into a bench HV load | real Voc/Isc/Vmp logged, replacing every [ASSUMED] in section 2 |
 | P3 | Supervisor + one module + Leaf pack, with contactors | PoE loss, heartbeat loss and cable pull each stop output within spec |
 | P4 | All six modules | per-side harvest logged; night PoE cut works; a week of insulation trend |

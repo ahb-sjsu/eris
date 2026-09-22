@@ -481,14 +481,20 @@ Each step passes before the next begins:
 1. **Cabinet dry:** wiring check, E-stop loop, IMD self-test, no pack connected.
 2. **BIM + pack, no load:** wake, read LBC, precharge onto the empty bus, close,
    open. Log the precharge time. Pull the E-stop in every state.
-3. **IM on a bench HV supply** (not the pack): DCX, then bridge, then a
-   resistive load, then surge, then every protection injected (spec P1
-   principle: the right trip fires).
-4. **IM on the pack:** resistive load to 3.5 kVA; an hour at full load; thermal survey.
-5. **Second IM:** parallel, sharing within 10 %; pull the sync pair (droop
+3. **RMs on the bench** (spec P0–P1b): the Sorensens in series (120 V /
+   18 A) as the PV simulator, the DIY water-heater load bank as the load.
+   Then prove bench CV mode (spec §5.3).
+4. **IM at reduced voltage:** DCX, then bridge, fed directly from the
+   Sorensens (≤ 120 V in), with the AC output scaled down; resistive load;
+   every protection injected (the right trip fires).
+5. **IM at full voltage, ~1 kW:** fed from a proven RM in **bench CV mode**
+   (350–400 V, capacitor bank + bleeder), space-heater load. There is **no
+   separate HV supply**: the RM is the supply.
+6. **IM on the pack:** resistive load to 3.5 kVA; an hour at full load; thermal survey.
+7. **Second IM:** parallel, sharing within 10 %; pull the sync pair (droop
    takes over), pull CAN, pull the master.
-6. **RMs on the bench** (spec P0–P1), then on the rail (P2), then into the pack.
-7. **Full chain:** sun → RM → bus → pack → IM → loads for a week; fallback
+8. **RMs on the rail** (spec P2), then into the pack (P3–P4).
+9. **Full chain:** sun → RM → bus → pack → IM → loads for a week; fallback
    drills (spec P5).
 
 ## 11. Open items (Phase 1)
