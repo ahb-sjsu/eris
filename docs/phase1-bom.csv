@@ -134,7 +134,7 @@ P05,spares,650 V SiC diode,M06,,4,1,4,ELECTRONICS,,15.36,15.36,QUOTE,
 P06,spares,UCC21520,,,4,1,4,ELECTRONICS,,13.32,13.32,QUOTE,
 P07,spares,H1Z2Z2-K 6 mm2,,generic,20 m,1,20 m,COMMODITY,,22.00,23.00,EST (research),as D01
 # TEST EQUIPMENT + SAFETY (if not already owned),,,,,,,,,,,,,
-T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",generic,1,1,1,OWNER BENCH,RM bench,0.00,549.00,OWNED? (high = budget buy if missing),ETOMMENS eTM-15010
+T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",OWNED: 2x Sorensen DCS60-18E,1,1,1,OWNER BENCH,series = 120 V/18 A covers 4S; check DCS max output float vs chassis before series; add series R for a sloped I-V curve,0.00,0.00,OWNED,
 T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,OWNER BENCH,IM bench before the pack,0.00,699.00,OWNED? (high = budget buy if missing),ETOMMENS eTM-6002
 T03,test,Electronic load,">=500 V DC, >=1 kW",generic,1,1,1,OWNER BENCH,,0.00,1070.00,OWNED? (high = budget buy if missing),Maynuo M9714B
 T04,test,Oscilloscope,"4-ch, >=200 MHz",generic,1,1,1,OWNER BENCH,,0.00,899.00,OWNED? (high = budget buy if missing),Rigol DHO924S

@@ -32,13 +32,15 @@ included. Conversions assumed €1 = $1.15 and NZ$1 = $0.58.
 
 Minimum ratings (BOM T01–T10). The lab notes in `casimir_research` show a
 500 MHz+ scope, 6.5-digit DMM and function generator. The 0–60 V Sorensen
-DCS60-18E appears there as equipment you'd supply, so it may not be on hand.
-If you have it, it can stand in for the Phase 1 **2S** string (Voc ≈ 49 V,
-Vmp 41.5 V). A 4S string needs ~110 V.
+DCS60-18E: **the owner has two**. One covers the Phase 1 2S string; two in
+series (120 V / 18 A) cover the 4S string (cold Voc ~110 V, Isc with rear
+gain ~12.4 A). Check the DCS manual's output-float limit before wiring them
+in series, and add a series power resistor for a sloped, panel-like I-V
+curve to exercise the MPPT.
 
 | Line | Need | Why | Usually on an optics bench? |
 |---|---|---|---|
-| T01 | DC supply ≥ 150 V, ≥ 10 A (PV simulator) | RM bench (4S later) | 60 V covers Phase 1 2S only |
+| T01 | DC supply ≥ 150 V, ≥ 10 A (PV simulator) | RM bench (4S later) | **owned**: 2× Sorensen DCS60-18E, 120 V/18 A in series |
 | T02 | **DC supply ≥ 450 V, ≥ 2 A, current-limited** | IM bench before the pack | rarely |
 | T03 | **Electronic load ≥ 500 V DC, ≥ 1 kW** | RM output, IM bench | rarely |
 | T04 | Scope 4-ch ≥ 200 MHz | everything | yes |
