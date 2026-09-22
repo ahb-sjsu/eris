@@ -123,7 +123,7 @@ A01,AC,Panel/enclosure,DIN,generic,1,1,1,COMMODITY,,40.00,100.00,EST (research),
 A02,AC,Breaker,2-pole 20 A,generic,1,1,1,COMMODITY,,119.49,119.49,SNIPPET,Eaton FAZ-C20/2-NA
 A03,AC,RCD 30 mA,"4-pole (3P+N) 40 A DIN, L1+L2+N through it",any IEC brand,1,1,1,COMMODITY,IEC 4P RCD is sold worldwide; US split-phase GFCI breakers need a matching load centre,40.00,120.00,EST (mine),IEC 4P 40 A 30 mA RCD
 A04,AC,AC cable,"4 conductors: L1/L2/N/PE, 10 AWG tinned marine",UL 1426 boat cable,10 m,1,10 m,COMMODITY,10/3 triplex + one 10 AWG green run,174.00,189.00,QUOTE,wireandcableyourway 10/3 marine + 4th conductor EST
-A05,AC,Test load,resistive 3.5 kW+ (heaters) + a motor load,generic,1,1,1,COMMODITY,,100.00,250.00,EST (research),
+A05,AC,AC test load,2x 120 V 1500 W open-coil space heaters (one per leg) + 1x 240 V heater across L1-L2 + a motor load for surge,any brand (avoid PTC ceramic for DC use; fine on AC),1,1,1,COMMODITY,IM output test; heaters plug straight in on AC,100.00,250.00,EST (research),
 # SPARES (fallback rule),,,,,,,,,,,,,
 P01,spares,MC4 pairs + bypass jumpers + pigtails,,generic,14,1,14,COMMODITY,panel bypass (spec 10) + wear pigtails,66.92,66.92,QUOTE,as R08
 P08,spares,Ball-lock pins,as R16,,4,1,4,COMMODITY,lanyards break; pins go overboard,40.00,100.00,EST (mine),
@@ -136,7 +136,7 @@ P07,spares,H1Z2Z2-K 6 mm2,,generic,20 m,1,20 m,COMMODITY,,22.00,23.00,EST (resea
 # TEST EQUIPMENT + SAFETY (if not already owned),,,,,,,,,,,,,
 T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",OWNED: 2x Sorensen DCS60-18E,1,1,1,OWNER BENCH,series = 120 V/18 A covers 4S; check DCS max output float vs chassis before series; add series R for a sloped I-V curve,0.00,0.00,OWNED,
 T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,BUY (not on bench),IM bench before the pack,699.00,699.00,BUDGET OPTION,ETOMMENS eTM-6002
-T03,test,Electronic load,">=500 V DC, >=1 kW",generic,1,1,1,BUY (not on bench),,1070.00,1070.00,BUDGET OPTION,Maynuo M9714B
+T03,test,DC load bank (DIY),"4x 240 V 1500 W water-heater elements in series (~38 Ohm each, ~154 Ohm total: ~800 W at 350 V), taps via DC isolators",generic water-heater elements + non-conductive tub + 2x 1000 V DC isolator + 10x38 gPV fuse/holder,1,1,1,BUILD,RM output bench load; elements run ~200 W each (cool); sheaths bonded to ground; DC-rated switching only,100.00,200.00,EST (mine),elements ~$15 ea; isolators as C05; fuse as C04
 T04,test,Oscilloscope,"4-ch, >=200 MHz",OWNED: Tektronix DPO,1,1,1,OWNER BENCH,,0.00,0.00,OWNED,
 T05,test,HV differential probes,>=1.5 kV,generic,2,1,2,BUY (not on bench),never ground-clip a floating HV node,710.00,710.00,BUDGET OPTION,2x Micsig DP1500
 T06,test,Current probe,AC/DC clamp,generic,1,1,1,BUY (not on bench),,370.00,370.00,BUDGET OPTION,Micsig CP2100A
@@ -144,3 +144,4 @@ T07,test,Multimeter,CAT III 1000 V / CAT IV 600 V,generic,1,1,1,BUY (not on benc
 T08,test,Insulation tester,1000 V,generic,1,1,1,BUY (not on bench),,184.10,184.10,BUDGET OPTION,Klein ET600
 T09,test,HV gloves + protectors,Class 0 (1000 V) + leather,generic,1,1,1,BUY (not on bench),test before each use,165.00,165.00,BUDGET OPTION,Salisbury GK011R
 T10,test,Face shield + LOTO kit,,generic,1,1,1,BUY (not on bench),,196.00,196.00,BUDGET OPTION,LOTO + arc shield
+T11,test,DC load chopper (optional),PWM switch in series with T03 for CC/CR/sweep: SiC MOSFET + UCC21520 + shunt + input caps + freewheel diode,C3M0075120D + UCC21520 + extra LaunchPad (as I02/I03/I01),1,1,1,BUILD,optional; turns T03 into a programmable load,0.00,200.00,EST (mine),reuses IM parts

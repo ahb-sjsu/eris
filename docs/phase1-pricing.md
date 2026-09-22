@@ -23,10 +23,12 @@ included. Conversions assumed €1 = $1.15 and NZ$1 = $0.58.
 | Supervisor + network | 839 | 1,128 | |
 | AC test panel | 473 | 778 | |
 | Spares | 272 | 333 | |
-| **Phase 1 total** | **~18,100** | **~32,400** | |
+| **Phase 1 total (excl. test gear)** | **~18,100** | **~32,400** | |
 | of which the Leaf pack | 4,450 | 10,600 | |
 | **Phase 1 without the pack** | **~13,600** | **~21,800** | |
-| Test gear to buy (owner has none of T02, T03, T05–T10) | 3,542 | 3,542 | budget options; see below |
+| Test gear to buy (owner has none of T02, T03, T05–T10) | 2,572 | 2,872 | budget options; T03 is a DIY water-heater load bank, T11 optional chopper |
+| **Phase 1 all-in (incl. test gear)** | **~20,700** | **~35,300** | |
+| **All-in without the pack** | **~16,200** | **~24,700** | |
 
 ## Test equipment: check against your bench
 
@@ -42,7 +44,7 @@ curve to exercise the MPPT.
 |---|---|---|---|
 | T01 | DC supply ≥ 150 V, ≥ 10 A (PV simulator) | RM bench (4S later) | **owned**: 2× Sorensen DCS60-18E, 120 V/18 A in series |
 | T02 | **DC supply ≥ 450 V, ≥ 2 A, current-limited** | IM bench before the pack | rarely |
-| T03 | **Electronic load ≥ 500 V DC, ≥ 1 kW** | RM output, IM bench | rarely |
+| T03 | **DC load ~150 Ω, ~1 kW, 450 V** | RM output bench | **build it**: 4× 240 V 1500 W water-heater elements in a tub (~$100–200); optional PWM chopper (T11) makes it programmable |
 | T04 | Scope 4-ch ≥ 200 MHz | everything | **owned**: DPO (confirm channels/bandwidth) |
 | T05 | **HV differential probes ≥ 1.5 kV, ×2** | floating switch nodes; never ground-clip a floating HV node | rarely |
 | T06 | AC/DC current probe, ≥ 1 MHz | inductor and switch currents | sometimes |
@@ -51,8 +53,7 @@ curve to exercise the MPPT.
 | T09 | **Class 0 gloves + leather protectors** | 400 V DC work | rarely |
 | T10 | LOTO kit + arc face shield | pack work | rarely |
 
-Budget options if missing: ETOMMENS eTM-6002 600 V/2 A ($699), Maynuo
-M9714B 500 V/1.2 kW (~$1,070), 2× Micsig DP1500 ($710), Klein ET600 ($184),
+Budget options: ETOMMENS eTM-6002 600 V/2 A ($699), 2× Micsig DP1500 ($710), Klein ET600 ($184),
 Salisbury GK011R ($165). Sources are in the BOM.
 
 ## Buy now (availability)
