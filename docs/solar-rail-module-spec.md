@@ -163,6 +163,16 @@ On every control cycle, the output current command is the **minimum** of:
 **reduce** power. Nothing on the network can command more than the module's
 local limits.
 
+### 5.2 Controller [DECISION]
+
+- A real-time MCU for the power loops. TI C2000 class (e.g. F28003x or F28P65x)
+  has the high-resolution PWM, fast ADCs and CAN, plus mature LLC and boost
+  reference code.
+- Ethernet: either on the MCU or a small sidecar (e.g. W5500 or an
+  Ethernet-capable MCU) linked to the loop MCU over SPI. The power loop must
+  not depend on the network stack's timing.
+- Signed firmware images with A/B slots; see sections 6.2 and 10.
+
 ### 5.3 Bench constant-voltage mode (bench use only) [DECISION]
 
 A proven RM doubles as the bench **high-voltage source** for bringing up the
@@ -183,16 +193,6 @@ inverter modules (Phase 1 LLD §10). No separate HV supply is bought.
   enable switch). PoE still powers gate drive, from a bench PoE injector,
   so pulling PoE still stops it.
 - **Protections:** unchanged (section 7). Output OV stays at 425 V.
-
-### 5.2 Controller [DECISION]
-
-- A real-time MCU for the power loops. TI C2000 class (e.g. F28003x or F28P65x)
-  has the high-resolution PWM, fast ADCs and CAN, plus mature LLC and boost
-  reference code.
-- Ethernet: either on the MCU or a small sidecar (e.g. W5500 or an
-  Ethernet-capable MCU) linked to the loop MCU over SPI. The power loop must
-  not depend on the network stack's timing.
-- Signed firmware images with A/B slots; see sections 6.2 and 10.
 
 ## 6. Network, PoE and protocol
 
