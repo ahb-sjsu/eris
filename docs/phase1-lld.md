@@ -294,6 +294,13 @@ class); PoE powered-device module (802.3af, 12 V out) feeding all gate drive;
 output HV DC relay with its coil on PoE power; C2000 LaunchPad + W5500
 Ethernet module.
 
+**Reserved I/O for the tracker (§6.2).** The RM board is not yet laid out,
+so reserve now: one H-bridge control output (PWM + direction) to an
+external actuator driver, two limit-switch inputs, one analog position
+input, one I²C port for a frame inclinometer/IMU, one input for the stow
+reed switch (§6.1), and a spare cable gland. These cost nothing to reserve
+now and a board respin to add later.
+
 **Through-hole power parts, deliberately.** They can be replaced with a
 soldering iron in a port, and TO-220/TO-247 parts have the widest
 substitutes.
@@ -303,7 +310,7 @@ substitutes.
 | Item | Detail |
 |---|---|
 | Panels | 2 × WERCHTAY 250 W model 2112 [LISTING], in series with their own MC4 leads |
-| Mount | **Fixed tilt, manual pin positions** (−60/−30/0/+30/+60°, fore-aft axis) [DECISION, tracker deferred] on a frame of slotted strut channel (Unistrut-type, stainless or hot-dip galvanized) clamped to the rail stanchions with 316 SS U-bolts |
+| Mount | **Fixed tilt, manual pin positions** (−60/−30/0/+30/+60°, fore-aft axis) [DECISION; the frame pivots on tracker-grade bearings from day one, and the actuator comes later (§6.2)] on a frame of slotted strut channel (Unistrut-type, stainless or hot-dip galvanized) clamped to the rail stanchions with 316 SS U-bolts |
 | Galvanic isolation | nylon/G10 isolating washers and sleeves wherever aluminium panel frames meet stainless or steel structure |
 | Stow | 0° (flat) with the pin in, for weather |
 | RM location | on the fixed rail structure (not the rotating frame) under a sun/spray shield |
@@ -336,6 +343,22 @@ Built in Phase 1, so nothing has to be torn out later:
 **Operating rule:** deploy only at anchor or alongside in settled weather;
 latched stowed underway. Deployed height doubles windage and puts a lever
 arm on the hinge.
+
+### 6.2 Tracker provision (actuator + sun tracking; build later)
+
+Phase 1 is manual pin positions. The tracker adds an actuator per side
+(or per frame) and tracking software. Provisions built now:
+
+| Provision | Detail |
+|---|---|
+| Pivot | fore-aft axis on **flanged bronze or UHMW bushings** sized for continuous tracking (not just a pin hole); the pin positions remain as the manual fallback |
+| Balance | pivot placed near the frame's centre of mass **with the fold-out stowed**; deployed fold-outs shift it up. The tracker limits travel when the stow switch says deployed |
+| Actuator mounts | welded/bolted clevis lugs on the frame and on fixed structure, geometry reserved for a **linear actuator** |
+| Travel | a linear actuator practically gives about **±60°**. The spec's ±90° needs a slew drive (worm gear) instead. **Owner decision**; the lugs above suit a linear actuator |
+| Power | a **24 V feed per side, pulled now** (W12, 6 mm² tinned duplex, fused in the hold). It is independent of the RM, so the tracker can still stow if an RM is dead |
+| Control | the **RM's MCU** runs the actuator loop (reserved I/O, §5). The **supervisor** computes the target angle from sun position (GPS time and position), heading, and roll/heel from Signal K, and sends it over the existing Ethernet link. No new network |
+| Stow logic | stow flat on high wind (anemometer via Signal K), when underway above a set speed [DECISION], on network loss (the RM drives to 0° on heartbeat timeout), and at night |
+| Fallback | a dead actuator: unpin it and set the manual pin (§6); the tracker only ever adds harvest |
 
 ## 7. Supervisor and network
 
@@ -370,6 +393,7 @@ Solar then goes to the house-battery path (spec §10).
 | W9 | CAN1 + sync pair | shielded twisted pair (DeviceNet/NMEA 2000-type or Cat6), 120 Ω terminated | — |
 | W10 | E-stop loop | 1.5 mm² tinned, NC contacts in series | fail-open by design |
 | W11 | 24 V house aux → cabinet | 4 mm² tinned | 20 A breaker at house panel |
+| W12 (×2) | 24 V tracker feed, hold → rail (**pulled now**, capped and labeled) | 6 mm² tinned marine duplex, ~35 m (≈4 % drop at 5 A) [DERIVED] | 10 A breaker per side in the cabinet |
 
 Run every DC pair **together** (compass deflection, EMI, spec §8.2).
 
@@ -417,3 +441,4 @@ Each step passes before the next begins:
 6. Insurer notification: no NRTL on panels or custom modules; solar cable, not boat cable.
 7. Tracker mechanical spec (Phase 2); it must carry the fold-out geometry of §6.1.
 8. Fold-out wind and hinge loads, and the deployed-weather limit, once the panel is chosen.
+9. Tracker travel: ±60° linear actuator vs ±90° slew drive (§6.2); actuator sizing once panel mass and the fold-out loads are known.
