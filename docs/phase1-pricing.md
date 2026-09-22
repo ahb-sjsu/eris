@@ -30,8 +30,9 @@ included. Conversions assumed €1 = $1.15 and NZ$1 = $0.58.
 
 ## Test equipment: check against your bench
 
-Minimum ratings (BOM T01–T10), to check against the owner's **home
-bench**. Known on it: **two Sorensen DCS60-18E** (0–60 V, 18 A). One covers the Phase 1 2S string; two in
+Minimum ratings (BOM T01–T10), checked against the owner's **home bench**
+(garage): **Tektronix DPO scope, Keithley 2000 6.5-digit DMM, function
+generator, and two Sorensen DCS60-18E** (0–60 V, 18 A). One covers the Phase 1 2S string; two in
 series (120 V / 18 A) cover the 4S string (cold Voc ~110 V, Isc with rear
 gain ~12.4 A). Check the DCS manual's output-float limit before wiring them
 in series, and add a series power resistor for a sloped, panel-like I-V
@@ -42,10 +43,10 @@ curve to exercise the MPPT.
 | T01 | DC supply ≥ 150 V, ≥ 10 A (PV simulator) | RM bench (4S later) | **owned**: 2× Sorensen DCS60-18E, 120 V/18 A in series |
 | T02 | **DC supply ≥ 450 V, ≥ 2 A, current-limited** | IM bench before the pack | rarely |
 | T03 | **Electronic load ≥ 500 V DC, ≥ 1 kW** | RM output, IM bench | rarely |
-| T04 | Scope 4-ch ≥ 200 MHz | everything | yes |
+| T04 | Scope 4-ch ≥ 200 MHz | everything | **owned**: DPO (confirm channels/bandwidth) |
 | T05 | **HV differential probes ≥ 1.5 kV, ×2** | floating switch nodes; never ground-clip a floating HV node | rarely |
 | T06 | AC/DC current probe, ≥ 1 MHz | inductor and switch currents | sometimes |
-| T07 | Multimeter CAT III 1000 V / CAT IV 600 V | the pack and the bus | a bench DMM isn't a CAT-rated handheld |
+| T07 | Multimeter CAT III 1000 V / CAT IV 600 V | the pack and the bus aboard | Keithley 2000 covers bench measurements; still get a CAT-rated handheld for work at the pack |
 | T08 | **Insulation tester 1000 V** | cables, array, IMD check | rarely |
 | T09 | **Class 0 gloves + leather protectors** | 400 V DC work | rarely |
 | T10 | LOTO kit + arc face shield | pack work | rarely |
