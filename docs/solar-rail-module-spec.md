@@ -8,7 +8,7 @@ It is programmable, networked, and powered and enabled over PoE.
 This is a design spec, not a record of built hardware. Following this repo's
 "nothing invented" rule, every number carries its source:
 
-- **[LISTING]**: from the panel's Walmart listing (WERCHTAY model 2112); not a datasheet
+- **[MAKER]**: the panel maker's published figures (Newpowa NPA200S-12J-Bi), not independently verified
 - **[ASSUMED]**: a typical value, standing in until the real one is known; listed in *Open items*
 - **[DERIVED]**: computed from the above; changes if they change
 - **[DECISION]**: a design choice, open to revision by the owner
@@ -43,32 +43,38 @@ STARBOARD TRACKER (12 panels)                  |        |                   |
 
 ## 2. Input: four panels in series
 
+**Panel: Newpowa NPA200S-12J-Bi** (200 W, 12 V-class mono, **bifacial**),
+chosen 2026-09-22 in place of the original WERCHTAY listing, which had no
+datasheet. Owner prefers bifacial. It fits the ~55 in rail bay: 1370 mm
+long, leaving ~27 mm (1 in) of clearance, so **measure the posts**; 765 mm
+tall, so the rail caps sit ~2.1 in above 28 in.
+
 | Quantity | Per panel | 4S string | Source |
 |---|---|---|---|
-| Rated power (STC) | 250 W | 1000 W | [LISTING], suspect: see note |
-| Vmp (STC) | 18.7 V | 74.8 V | [LISTING] |
-| Imp (STC) | 13.4 A | 13.4 A | [DERIVED] 250 W / 18.7 V |
-| Voc (STC) | ~22.4 V | ~90 V | [ASSUMED] Voc ≈ 1.2 × Vmp, typical 12 V-class mono |
-| Isc (STC) | ~14.3 A | ~14.3 A | [ASSUMED] Isc ≈ 1.07 × Imp |
-| Voc temp. coeff. | −0.28 %/°C | | [ASSUMED] typical mono PERC |
-| Voc at −10 °C cell | | ~99 V | [DERIVED] +9.8 % over STC |
-| Vmp at 70 °C cell | | ~65 V | [DERIVED/ASSUMED] ≈ −0.3 %/°C |
-| Max system voltage | ? | must be ≥ 150 V | **unknown**: listing says "Maximum input voltage 30 V", meaning unclear |
+| Rated power (STC) | 200 W | 800 W | [MAKER] |
+| Vmp / Imp (STC) | 20.74 V / 9.68 A | 83.0 V / 9.68 A | [MAKER] |
+| Voc / Isc (STC) | 24.34 V / 10.31 A | 97.4 V / 10.31 A | [MAKER] |
+| Temp. coeff. Pmax / Voc | −0.38 / −0.36 %/K | | [MAKER] |
+| Voc at −10 °C cell | | **109.6 V** | [DERIVED] +12.6 % |
+| Vmp at −10 °C / 70 °C cell | | ~94 V / ~69 V | [DERIVED; Vmp coeff ASSUMED ≈ Pmax coeff] |
+| Max system voltage | 1000 V | | [MAKER] |
+| Rear side | bifacial, transparent backsheet (not dual glass); rear gain **not published** | | [MAKER] |
+| Isc with rear gain | ~12.4 A at +20 % rear gain | | [ASSUMED] 20 % rear gain, generous for a rail mount over water and deck |
+| Size / weight | 1370 × 765 × 35 mm / ~11 kg | | [MAKER] size; weight [ASSUMED] from the mono NPA200S-12J (11.2 kg), not published |
+| Efficiency | 19.1 % front | | [DERIVED] 200 W / 1.048 m². Newpowa's "21.8 %" presumably counts rear gain |
+| Certifications | **none found** (no UL/IEC certificate numbers, no IEC 61701 salt mist) | | ask the seller before buying; seal junction boxes (§8) |
 
-**Note on power.** The panel is 55.12 × 28.94 in = 1.03 m². At 250 W that is
-24.3 % module efficiency, beyond what budget panels deliver. Plan on
-**~200–215 W per panel (~850 W per string)** until one is measured. If the
-panels deliver less power, they deliver less *current* (Vmp barely moves), so
-the input current ratings below stay safe either way.
+[MAKER] = the maker's published figures (newpowa.com), not independently
+verified. Measure one panel in P2 (§11).
 
 ### Input ratings [DECISION]
 
 | Parameter | Value | Why |
 |---|---|---|
-| Absolute max input voltage | **150 V** | ~50 % margin over the assumed cold Voc, while Voc is unconfirmed; also covers a 5S string if the design is revised |
-| MPPT window | **30–110 V** | a 4S string from hot and dim to cold Voc, **plus degraded 3S and 2S strings** with dead panels bypassed (section 10); full power only for 4S |
-| Max input current, continuous | **18 A** | Isc × 1.25 (NEC 690.8 practice for irradiance enhancement) |
-| Rated input power | **1.1 kW** | nameplate 1000 W + margin; realistic ~850 W |
+| Absolute max input voltage | **150 V** | 37 % margin over the 4S cold Voc (109.6 V). 5S (137 V cold) would also be inside it, but its cold Vmp (~117 V) leaves the MPPT window |
+| MPPT window | **30–110 V** | a 4S string from hot and dim (~69 V) to cold Vmp (~94 V), **plus degraded 3S and 2S strings** with dead panels bypassed (section 10); full power only for 4S |
+| Max input current, continuous | **18 A** | NPA200S-12J-Bi with +20 % rear gain needs ~15.5 A (Isc × 1.2 × 1.25, NEC 690.8 practice for irradiance enhancement); 18 A covers it |
+| Rated input power | **1.1 kW** | 800 W nameplate + margin (the board was rated before the panel was chosen; it stays, so a stronger panel fits without a redesign) |
 | Reverse-polarity protection | required, non-destructive | miswiring at the rail is likely |
 
 ## 3. Output: the pack bus
@@ -83,31 +89,33 @@ the input current ratings below stay safe either way.
 | Max output current | **4.0 A** | [DERIVED] 1.1 kW × 0.96 / 288 V = 3.7 A, rounded up |
 | Reverse current | **zero, blocked** | the pack must never back-feed a module |
 
-Six modules at full output put ~22 A into the pack (~5–6 kW nameplate,
-realistically ~5 kW). That is about 0.1C for the pack, well within Leaf
-charge ratings. Each side's run carries ≤ 12 A.
+Six modules at full sun put ~14 A into the pack (4.8 kW nameplate at
+~350 V), under 0.1C for the pack, well within Leaf charge ratings. Each
+side's run normally carries ~7 A; it is fused and rated for the modules'
+4 A maximum each (≤ 12 A per side).
 
 ## 4. Power stage
 
 The difficulty is the voltage ratio. From a 4S string, the converter goes from
-65 V to 403 V (6.2:1) at worst and from 99 V to 288 V (2.9:1) at best. The
+~69 V to 403 V (5.9:1) at worst and from ~94 V to 288 V (3.1:1) at best. The
 module needs a transformer anyway, for galvanic isolation (section 7). Two
 candidate topologies:
 
 ### Option A: boost + LLC DC transformer, two stages [RECOMMENDED for the first build]
 
 ```
-PV 30-110 V -> [sync boost, MPPT, current-mode] -> V_int -> [LLC at resonance, 1:3, fixed ratio] -> bus 288-403 V
+PV 30-110 V -> [sync boost, MPPT, current-mode] -> V_int -> [LLC at resonance, 1:2.8, fixed ratio] -> bus 288-403 V
 ```
 
 - The LLC runs **unregulated at its resonant frequency**, as a DC transformer
   (DCX), where it is ~97–98 % efficient and has zero-voltage switching
   across the full load range. The intermediate voltage just follows the
-  bus: V_int = V_bus / 3 = **96–134 V**.
+  bus: V_int = V_bus / 2.8 = **103–144 V**.
 - The boost does all the regulation: MPPT and output current limit. Its
-  output (96 V minimum) is always above the highest string Vmp (~82 V on a
-  cold morning), so it never has to step down. [DERIVED, depends on the
-  assumed Voc/Vmp]
+  output (103 V minimum) is always above the highest string Vmp (~94 V on a
+  cold morning), so it never has to step down. [DERIVED] The ratio is
+  1:2.8 rather than 1:3 for exactly this margin: at 1:3 the floor
+  (96 V) would sit only 2 V above the cold Vmp.
 - Device voltages: boost switches in the 200 V class, LLC primary in the
   200 V class, secondary rectifier in the 650 V class (GaN or SiC).
 - Expected efficiency: ~95–96 % overall. [ASSUMED from typical stage efficiencies]
@@ -380,7 +388,7 @@ fallback.
 
 | Phase | Setup | Pass criteria |
 |---|---|---|
-| P0 | LLC-DCX alone: DC supply in, resistive load out, **reduced voltage first** (e.g. 30 V in) | ratio holds 1:3 under load; ZVS confirmed on scope; efficiency ≥ 96 % at full voltage |
+| P0 | LLC-DCX alone: DC supply in, resistive load out, **reduced voltage first** (e.g. 30 V in) | ratio holds 1:2.8 under load; ZVS confirmed on scope; efficiency ≥ 96 % at full voltage |
 | P1 | Full module: PV simulator (programmable supply with an I-V curve) in, HV electronic load or battery emulator out | MPPT tracks ≥ 99 % of simulator MPP; every section-7 fault fires when injected, **and the right one fires** |
 | P2 | One module on 4 real panels, into a bench HV load | real Voc/Isc/Vmp logged, replacing every [ASSUMED] in section 2 |
 | P3 | Supervisor + one module + Leaf pack, with contactors | PoE loss, heartbeat loss and cable pull each stop output within spec |
@@ -396,7 +404,7 @@ never seen to fire isn't verified.
    system voltage**. If the maximum system voltage really is 30 V, series
    strings are impossible and this spec's input section fails. Measure a
    panel (P2) regardless.
-2. **Real panel power:** the listing implies 24.3 % efficiency. Measure.
+2. **Real panel power:** measure one NPA200S-12J-Bi against its published figures, and the rear gain as mounted on the rail.
 3. **No NRTL listing** on the panels, and none on these custom modules. **Tell
    the insurer** before installing (policy docs are in `yacht/`).
 4. **Tracker mechanics:** axis orientation, ±90° drive, stow position and

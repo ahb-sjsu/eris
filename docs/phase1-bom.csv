@@ -1,9 +1,9 @@
 line,assembly,item,spec,example_part,qty_per,assy_qty,total_qty,sourcing,notes
 # RAIL ASSEMBLY (x2: port + starboard),,,,,,,,,
-R01,rail,Solar panel,"250 W [LISTING], mono, 18.7 V Vmp, 55.12x28.94 in",WERCHTAY 2112,2,2,4,COMMODITY,no NRTL listing; get datasheet (Voc/Isc/max system V) before buying
+R01,rail,Solar panel,"200 W bifacial mono, Vmp 20.74 V, Voc 24.34 V, Isc 10.31 A, 1000 V, 1370x765x35 mm",Newpowa NPA200S-12J-Bi,2,2,4,COMMODITY,$209.99 newpowa.com 2026-09-22; ask for UL/IEC cert numbers; measure post spacing first
 R02,rail,Strut channel,"41x41 mm slotted, 316 SS or hot-dip galvanized",Unistrut P1000-type,6 m,2,12 m,COMMODITY,cut to fit frame
 R03,rail,Rail clamp U-bolt,316 SS sized to stanchion OD,generic,4,2,8,COMMODITY,measure stanchion OD
-R04,rail,Panel mid/end clamps,for 60 mm (2.36 in) frame,generic PV clamps,4,2,8,COMMODITY,
+R04,rail,Panel receivers + edge clamps,for 35 mm frame; edge-only (bifacial rear clear),generic PV clamps,4,2,8,COMMODITY,see detachable provision LLD 6.3
 R05,rail,Tilt pivot + lock pin,"316 SS pin, 5 positions -60..+60 deg",fabricated,1,2,2,FAB,tracker deferred
 R06,rail,Isolating washers/sleeves,nylon or G10,generic,1 kit,2,2,COMMODITY,Al frame vs SS/steel
 R07,rail,PV cable string leads,4 mm2 H1Z2Z2-K red+black,generic,6 m,2,12 m,COMMODITY,
@@ -15,6 +15,13 @@ R12,rail,Stow latch reed switch mount,sealed reed switch + magnet,generic,1,2,2,
 R13,rail,Pivot bushings,flanged bronze or UHMW sized for continuous tracking,generic,2,2,4,COMMODITY,tracker provision (LLD 6.2)
 R14,rail,Actuator clevis lugs,frame + fixed-structure lugs sized for the R15 actuator's brackets,fabricated,2,2,4,FAB,
 R15,rail,Tracker actuator (LATER - not Phase 1),"1500 N, 400 mm stroke, 12 V, IP54 + bellows boot",ECO-WORTHY B00NM8H5SM,1,2,0,COMMODITY,buy later + 1 spare; 24->12 V DC-DC at rail
+R16,rail,Ball-lock (detent) pins,316 SS captive with lanyard; diameter per tab design,chandlery/bimini hardware,4,4,16,COMMODITY,4 per panel (x4 panels); + 4 spare in P-lines
+R17,rail,Pin tabs + receivers,316 SS or Al tabs bolted to panel's pre-drilled holes; frame receivers,fabricated,4,4,16,FAB,no drilling of panel frame (LLD 6.3)
+R18,rail,Stow button + LED,sealed pushbutton + green LED (IP67),generic,1,2,2,COMMODITY,to RM reserved input
+R19,rail,MC4 pigtails,~0.3 m 4 mm2 PV cable MC4 M+F,generic,2,4,8,COMMODITY,wear part between panel lead and harness
+R20,rail,MC4 dust caps,M+F,generic,2,4,8,COMMODITY,cap unplugged ends
+R21,rail,Deck box,"5052 Al, drained, gasketed lid, ~1420x820x600 mm inside, lashing points",fabricated,1,2,2,FAB,one per side sized for 12 rail panels
+R22,rail,Foam separators,closed-cell 10 mm sheet cut to panel size,generic,12,2,24,COMMODITY,
 D06,downrun,24 V tracker feed,6 mm2 tinned marine duplex,UL 1426 boat cable,35 m,2,70 m,COMMODITY,pulled now; capped (LLD W12)
 D07,downrun,Tracker feed breaker,DIN 10 A DC,generic,1,2,2,COMMODITY,in cabinet
 # DOWN-RUNS (x2),,,,,,,,,
@@ -118,7 +125,8 @@ A03,AC,RCD/GFCI,split-phase rated,generic,1,1,1,COMMODITY,
 A04,AC,AC cable,"3x6 mm2 (10 AWG) + PE, tinned marine",UL 1426 boat cable,10 m,1,10 m,COMMODITY,
 A05,AC,Test load,resistive 3.5 kW+ (heaters) + a motor load,generic,1,1,1,COMMODITY,
 # SPARES (fallback rule),,,,,,,,,
-P01,spares,MC4 pairs + bypass jumpers,,generic,10,1,10,COMMODITY,panel bypass (spec 10)
+P01,spares,MC4 pairs + bypass jumpers + pigtails,,generic,14,1,14,COMMODITY,panel bypass (spec 10) + wear pigtails
+P08,spares,Ball-lock pins,as R16,,4,1,4,COMMODITY,lanyards break; pins go overboard
 P02,spares,10x38 gPV fuses 10/20 A,,generic,4,1,4,COMMODITY,
 P03,spares,200 V Si MOSFET,M04,,6,1,6,ELECTRONICS,
 P04,spares,1200 V SiC MOSFET,I02,,6,1,6,ELECTRONICS,

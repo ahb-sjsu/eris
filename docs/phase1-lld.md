@@ -1,7 +1,7 @@
 # Phase 1: low-level design
 
 Companion to `solar-rail-module-spec.md` (the "spec"). The parts list is in
-`phase1-bom.csv`. The same source tags apply: **[LISTING] [ASSUMED]
+`phase1-bom.csv`. The same source tags apply: **[MAKER] [ASSUMED]
 [DERIVED] [DECISION]**. Every [DECISION] is the owner's to revise.
 
 ## 0. Scope
@@ -21,8 +21,8 @@ chain end to end:
 How this differs from the spec:
 
 - **2 panels per RM (2S), not 4.** Same RM hardware; the input simply sits
-  low in the MPPT window (spec section 2). Phase 1 solar is ~0.8 kW
-  realistic, ~1 kW nameplate.
+  low in the MPPT window (spec section 2). Phase 1 solar is 4 × 200 W
+  bifacial (Newpowa NPA200S-12J-Bi) = 800 W front-side nameplate, plus rear gain.
 - The spec left the load side out of scope. This document designs it: a
   modular inverter in 3.5 kVA steps.
 - **Fold-out panels: reserved, not built** (§6.1). Each rail panel will later
@@ -274,10 +274,10 @@ The spec's design, built as specified, with the input at 2S:
 
 | Quantity | 2S value | Source |
 |---|---|---|
-| Vmp STC / hot 70 °C | 37.4 V / ~32 V | [LISTING]/[DERIVED] |
-| Voc cold (−10 °C) | ~49 V | [ASSUMED] Voc, spec §2 |
-| Power | ~420 W realistic, 500 W nameplate | [DERIVED] spec §2 note |
-| Boost gain | V_int (96–134 V) / 32–49 V = 2.0–4.2 | [DERIVED] |
+| Vmp STC / hot 70 °C / cold −10 °C | 41.5 V / ~34 V / ~47 V | [MAKER]/[DERIVED] |
+| Voc cold (−10 °C) | ~54.8 V | [DERIVED] |
+| Power | 400 W front nameplate + rear gain | [MAKER] |
+| Boost gain | V_int (103–144 V) / 34–47 V = 2.2–4.2 | [DERIVED] |
 | Output current | ≤ 1.5 A at 288 V | [DERIVED] |
 | Output fuse (in hold) | 10 A gPV (cable protection, not module protection) | [DECISION] |
 
@@ -286,7 +286,7 @@ The same boards go to 4S in Phase 2 with no hardware change, and the spare
 module is identical.
 
 Key parts (see BOM for the full list): synchronous boost with 200 V Si
-MOSFETs (TO-220); LLC-DCX primary full bridge with 200 V Si MOSFETs, 1:3
+MOSFETs (TO-220); LLC-DCX primary full bridge with 200 V Si MOSFETs, 1:2.8
 ferrite transformer (ETD-class core, litz); **secondary with 650 V SiC
 Schottky diodes** (bridge rectifier: no gate drive on the HV side, and it
 blocks reverse current for free); isolated output sensing (AMC1311/AMC1301
@@ -309,7 +309,8 @@ substitutes.
 
 | Item | Detail |
 |---|---|
-| Panels | 2 × WERCHTAY 250 W model 2112 [LISTING], in series with their own MC4 leads |
+| Panels | 2 × **Newpowa NPA200S-12J-Bi** 200 W bifacial [MAKER], in series with their own MC4 leads. Before buying: measure the post spacing (panel is 1370 mm, bay ~1397 mm) and ask the seller for UL/IEC certificate numbers |
+| Rear side clear | **bifacial: nothing behind the cell area.** The frame holds the panel at its edges only; strut channel, actuator and RM all sit clear of the back face. The rear gain comes from light off the water and deck |
 | Mount | **Fixed tilt, manual pin positions** (−60/−30/0/+30/+60°, fore-aft axis) [DECISION; the frame pivots on tracker-grade bearings from day one, and the actuator comes later (§6.2)] on a frame of slotted strut channel (Unistrut-type, stainless or hot-dip galvanized) clamped to the rail stanchions with 316 SS U-bolts |
 | Galvanic isolation | nylon/G10 isolating washers and sleeves wherever aluminium panel frames meet stainless or steel structure |
 | Stow | 0° (flat) with the pin in, for weather |
@@ -330,7 +331,7 @@ Built in Phase 1, so nothing has to be torn out later:
 
 | Provision | Detail |
 |---|---|
-| Frame strength | rail frame, clamps and stanchion attachment designed for **2 panels per bay** (~2 × panel mass [ASSUMED ~9 kg each]) plus deployed wind load on the doubled height. Size the loads once the panel is chosen |
+| Frame strength | rail frame, clamps and stanchion attachment designed for **2 panels per bay** (~2 × panel mass [ASSUMED ~11 kg each]) plus deployed wind load on the doubled height. Size the loads once the panel is chosen |
 | Hinge line | top rail of the frame drilled/tapped for the hinge along its full length; isolating strip (G10/nylon) between the SS hinge and the Al panel frame |
 | Deployed stay | two stay/gas-strut mount points per bay, set for the deployed angle; a positive latch for the stowed position (not gravity) |
 | Stow sensor | a mount for one sealed reed switch per bay on the stow latch. Later the supervisor alarms if a fold-out is deployed while underway (speed over ground from Signal K) |
@@ -363,7 +364,63 @@ Phase 1 is manual pin positions. The tracker adds an actuator per side
 | → sealing | **IP54 is splash-proof, not salt-spray-proof.** Fit a bellows boot over the rod, put the motor end under the RM spray shield, and treat it as a consumable with a spare aboard. Or pay for an IP66 actuator of the same size |
 | → voltage | it's 12 V; the feed is 24 V. Use a small 24→12 V DC-DC at the rail, or the maker's 24 V version if one exists (not verified) |
 | → position | the listing shows no position feedback. The frame inclinometer/IMU (reserved RM I²C) measures the actual panel angle, which is better anyway: it sees roll too |
-| → force | rough check: 2 panels (≈2 m² with the fold-out deployed) in a 20 m/s wind is ≈600 N of panel load. Through a short actuator lever that reaches ≈1,100 N [DERIVED, rough, geometry not yet set], close to the 1500 N rating. The stow-on-wind rule is **required, not optional**; set the lug geometry so the actuator's lever arm is as long as the 400 mm stroke allows |
+| → force | rough check: 2 panels (≈2 m² with the fold-out deployed) in a 20 m/s wind is ≈600 N of panel load. Through a short actuator lever that reaches ≈1,100 N [DERIVED, rough, geometry not yet set], close to the 1500 N rating. The stow-on-wind rule is **required, not optional**; set the lug geometry so the actuator's lever arm is as long as the 400 mm stroke allows. With detachable panels (§6.3) the actuator only has to work up to the 25 kn deployment limit: load goes with wind speed squared, so ≈(13/20)² × 1,100 ≈ **460 N**, comfortably inside 1500 N |
+
+### 6.3 Detachable panels (built in Phase 1)
+
+The panels come off and go into a deck box for rough weather or long
+passages. The frame then no longer needs to survive a storm with panels on,
+which lightens the frame, hinge and actuator loads.
+
+**Design cases [DECISION]:**
+
+| Condition | Panels | Frame designed for |
+|---|---|---|
+| Deployed / tracking | on | up to **25 kn true wind**, fold-outs included (the deployment limit) |
+| Stowed flat, latched | on | up to **40 kn**: the "no time to strike them" margin |
+| Heavy weather forecast / offshore passage | **off, in the box** | empty frame only |
+
+**Quick release:**
+- **Four captive 316 SS ball-lock (detent) pins per panel**, on lanyards,
+  through tabs bolted to the panel's **own pre-drilled mounting holes** (no
+  drilling of the panel frame) into receivers on the rail frame. Chandlery
+  hardware (bimini/dodger fittings), sold everywhere. One pin per panel can
+  take a small padlock for theft at the dock.
+- A **fold-out pair comes off as one unit** (folded, hinge attached), ~22 kg:
+  one person in calm conditions, two otherwise. **Strike panels before the
+  weather arrives, not in it**; a 1 m² panel in a gust is a sail.
+- Receivers keep the panel edges clear of the rear face (bifacial, §6).
+
+**Electrical, the safe-unplug sequence:**
+1. Press the **stow button** at that rail (sealed pushbutton + LED, wired
+   to the RM's reserved input, §5).
+2. The RM ramps to 0 A and opens its output relay. The LED shows **green =
+   safe to unplug**.
+3. Unplug the MC4 pigtails and cap the ends; pull the pins.
+
+**Never unplug MC4s under load**: a DC arc destroys the connector. At 0 A the
+open-circuit voltage is still there in daylight (~55 V at 2S, ~110 V at 4S);
+unmated MC4s are touch-safe.
+
+- **Replaceable pigtails:** a short (~0.3 m) MC4 pigtail sits between each
+  panel's own leads and the string harness, so plugging and unplugging wears
+  out the cheap part. MC4s aren't designed for frequent plugging (**check
+  the mating-cycle rating** of the brand bought), so carry spare pigtails
+  and a crimp tool.
+
+**Deck box (one per side) [DECISION]:**
+- Holds that side's 12 rail panels at ~45 mm pitch (35 mm panel + 10 mm
+  closed-cell foam separator). Inside ~1420 × 820 × 600 mm; later ~1100 mm
+  deep when the 12 fold-outs are added (or a second box).
+- Loaded mass ~135 kg per side (~270 kg with fold-outs). Site it low and as
+  near the centreline as deck layout allows; through-bolted chocks plus
+  lashing points.
+- Fabricated 5052 aluminium, drained (it doesn't need to be watertight; the
+  panels are outdoor-rated), gasketed lid, glass faces protected by the foam.
+- Alternative if space allows: the lazarette or hold, with the same foam rack.
+
+**Fallback:** if a pin, receiver or tab is lost, the panel can be through-bolted
+temporarily with stock M8 316 SS hardware in the same holes.
 
 ## 7. Supervisor and network
 
@@ -447,3 +504,5 @@ Each step passes before the next begins:
 7. Tracker mechanical spec (Phase 2); it must carry the fold-out geometry of §6.1.
 8. Fold-out wind and hinge loads, and the deployed-weather limit, once the panel is chosen.
 9. Tracker travel: ±60° linear actuator vs ±90° slew drive (§6.2); actuator sizing once panel mass and the fold-out loads are known.
+10. Deck box location(s) and deck layout; the 25 kn / 40 kn design cases (§6.3) to confirm.
+11. Newpowa NPA200S-12J-Bi: weight and rear gain not published; UL/IEC certificate numbers not found. Weigh one; ask the seller.
