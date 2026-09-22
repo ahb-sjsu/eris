@@ -13,9 +13,9 @@ chain end to end:
 |---|---|---|
 | Rail assembly, port | 1 | 2 panels + 1 rail module (RM) + mount + wiring |
 | Rail assembly, starboard | 1 | same |
-| Leaf 62 kWh pack | 1 | used pack, its own battery controller (LBC) and internal contactors |
+| Leaf modules | 48 | used Leaf Gen 3 (40 kWh-pack type) 4S2P modules, one 2023 lot: **2 strings × 24 in series = 80 kWh** (§3) |
 | Hold cabinet | 1 | DC bus, fuses and disconnects, supervisor, network |
-| Battery interface module (BIM) | 1 | the one pack interface; the cabinet has room for more |
+| Battery interface module (BIM) | 2 | one per string: BMS, contactors, precharge, fuse, service disconnect |
 | Inverter module (IM-3500) | 1 installed + 1 spare | **3.5 kVA per module**, paralleled to scale |
 
 How this differs from the spec:
@@ -45,16 +45,16 @@ STBD RAIL         |                             |  +------+-----------+---------
                   |                                                 |  AC out 120/240 V
                   |                                                 v  split-phase 60 Hz
                   |                                              [AC test panel]
-                  |          BIM:  +BUS--[NH F 40A]--[ISO 63A]--(pack HV+)
-                  |                -BUS-------------[ISO]-------(pack HV-)
-                  |                LEAF PACK (internal SMR+, SMR-, PRE)
-                  |                   ^ 12 V coils, 12 V wake   ^ CAN (LBC)
-                  |                [contactor drivers]<--[Battery-Emulator board]
-                  |                                             ^ CAN0 (battery protocol)
+                  |   BIM x2: +BUS--[NH F 40A]--[ISO]--[K+ | PRE]--(string +)
+                  |           -BUS-----------------[ISO]--[K-]------(string -)
+                  |   STRING = 24 Leaf modules in series (96S2P, 40 kWh),
+                  |            mid-string service disconnect between 12 and 13
+                  |   [BMS per string: 96 cell taps, Hall sensor]--drives K+/K-/PRE
+                  |                                             ^ CAN0 (BMS broadcast)
    Cat6 PoE ------+------------>[PoE switch]--Eth--[SUPERVISOR (Pi 5 + 2-CH CAN)]
                                                     CAN1 + sync pair --> IMs
-   E-STOP loop (hardwired): opens pack contactors, drops IM enables, cuts PoE
-   24 V house battery --> 24->12 V (LBC, contactors), 24->48 V (PoE), 24 V (IM aux)
+   E-STOP loop (hardwired): opens string contactors, drops IM enables, cuts PoE
+   24 V house battery --> 24->12 V (BMSs, contactors), 24->48 V (PoE), 24 V (IM aux)
 ```
 
 ## 2. Hold cabinet: the modular DC bus
@@ -65,7 +65,7 @@ while the others run.
 
 | Feeder | Phase 1 fuse | Disconnect | Cable | Scales to |
 |---|---|---|---|---|
-| Pack (via BIM) | NH1 gPV **40 A** in a 160 A holder | DC load-break isolator ≥ 600 V, ≥ 63 A | 25 mm² H1Z2Z2-K | swap to 100 A fuse and isolator as IMs are added (§2.1) |
+| Each string (via its BIM), ×2 | NH1 gPV **40 A** in a 160 A holder | DC load-break isolator ≥ 600 V, ≥ 63 A | 25 mm² H1Z2Z2-K | fuse up to 63 A per string as IMs are added (§2.1) |
 | Rail side, per side | 10×38 gPV **10 A** | 2-pole DC isolator 1000 V, 32 A | 6 mm² H1Z2Z2-K | 20 A fuse at 3 RMs/side (spec §8.2) |
 | Each IM | 10×38 gPV **20 A** | 2-pole DC isolator 1000 V, 32 A | 4 mm² H1Z2Z2-K | one feeder per IM |
 | Bus SPD | per SPD maker | — | short | — |
@@ -84,76 +84,125 @@ while the others run.
 
 ### 2.1 Scaling arithmetic [DERIVED]
 
-- Each IM draws at most 3.5 kVA / 0.95 / 300 V ≈ **12.3 A** at the pack's
+- Each IM draws at most 3.5 kVA / 0.95 / 300 V ≈ **12.3 A** at the
   low-voltage cutoff.
-- The pack main fuse must carry n × 12.3 A plus the solar input (~22 A at the
-  full 24 panels). 40 A covers 2 IMs; 100 A covers ~6 IMs, ~21 kVA.
-- Past ~6 IMs, add a **second pack and a second BIM**, not a bigger fuse. The
-  Leaf pack could deliver far more, but at 0.3C (~20 kW) a 62 kWh pack runs
-  for three hours. Capacity, not current, sets when the next pack comes.
+- The two strings share the bus current. With 40 A per string, the battery
+  side covers ~80 A: ~6 IMs (~21 kVA), which is also the busbar's limit.
+  Plan on **one string losing** (§3.6): then 40 A covers 3 IMs, and the
+  supervisor sheds load to match.
+- 80 kWh at 21 kW is ~4 hours of full inverter load. More capacity means a
+  **third string and a third BIM** on the same bus; the cabinet has room.
 
-## 3. Battery interface module (BIM)
+## 3. Battery: two strings of Leaf modules, one BIM each
 
-One BIM per pack. Its job: wake the pack, read it, close its contactors safely,
-tell the supervisor the limits, and open everything on any fault.
+### 3.0 The modules
 
-### 3.1 Parts and roles
+**48 used Nissan Leaf "Gen 3" modules** (the 40 kWh-pack type), one lot
+from a single 80 kWh stationary generator prototype, built 2023, never in a
+car (seller's description, eBay, $160 each).
+
+| Per module | Value | Source |
+|---|---|---|
+| Configuration | 4S2P (two 2S2P Leaf modules in one package), NMC, AESC | [MAKER] seller / JAG35 |
+| Voltage | 14.6 V nominal, 16.8 V full (4.2 V/cell), 12.0 V empty (3.0 V/cell) | [MAKER]/[DERIVED] |
+| Capacity | 112 Ah, 1.67 kWh | [MAKER] |
+| Size / weight | 319 × 222 × 68 mm / 8.7 kg | [MAKER] JAG35 |
+
+| Battery | Value |
+|---|---|
+| String | **24 modules in series = 96S2P**: 288–403 V, 350 V nominal, 40 kWh. The same window as the rest of the system, so nothing else changes |
+| Battery | **2 strings in parallel on the bus = 80 kWh**, 418 kg of modules |
+| Why modules, not a whole pack | 8.7 kg pieces go down a hatch by hand; a failed module is a $160 swap; each string is independent (§3.6) |
+
+### 3.1 Incoming inspection (before any string is built)
+
+On the owner's bench, per module:
+
+1. **Open-circuit voltage** on the Keithley 2000; log it. Set aside outliers
+   from the lot's median.
+2. **Capacity:** charge CC/CV to 16.8 V on one Sorensen DCS60-18E (≤ 18 A),
+   discharge through a ~1 Ω load (~15 A), and log voltage against time. Below
+   ~100 Ah (nominal 112 Ah) the module becomes a spare, not a string member.
+   [DECISION]
+3. **Internal resistance** from the voltage step under a known current pulse.
+4. **Matching:** build each string from the 24 closest in capacity and
+   resistance. The leftovers are the spares.
+
+### 3.2 BIM parts and roles (one BIM per string)
 
 | Function | Implementation | Why |
 |---|---|---|
-| Leaf battery controller comms + contactor sequencing | **Battery-Emulator** firmware (github.com/dalathegreat/Battery-Emulator) on a LilyGO T-CAN485 or T-2CAN board | proven Leaf 62 kWh support; handles the Leaf quirks (below) |
-| What the supervisor sees | the Battery-Emulator board's **inverter-side CAN output** (a standard home-battery protocol: charge voltage limit, charge/discharge current limits, SOC, alarms) | the supervisor reads a *generic* battery. A different pack chemistry later is a config change, not a rewrite |
-| Contactor coils | Leaf internal SMR+, SMR−, precharge relay; **12 V coils**, flyback diode per coil, PWM hold at ~6 V after pull-in (Leaf practice) | the pack's own switchgear, rated for it |
-| Coil drivers | 3 channels: automotive relays or SSRs driven from the Battery-Emulator board's contactor outputs | Battery-Emulator supports SSR PWM mode |
-| 12 V for LBC and coils | 24→12 V DC-DC from the house battery, ≥ 10 A | house battery already aboard |
-| Main fuse | NH1 gPV, in the BIM, **at the pack end** of the pack cable | the source-end fuse protects the cable |
-| Maintenance disconnect | DC isolator; **off-load only**: open the contactors first | contactors break current, the isolator provides visible isolation |
-| E-stop | series loop of NC mushroom buttons (hold, wheelhouse); breaking the loop drops coil power directly, in hardware | works even if every computer is hung |
+| Cell monitoring + balancing | **Orion BMS 2**, a version covering ≥ 96 cells (EV-conversion standard, ~€700–1,200); **ENNOID-BMS** (open source) as the alternative. **One BMS per string** | 96 series groups per string need per-group voltage, temperature and balancing. Separate BMSs mean one BMS failure takes out only one string (§3.6) |
+| Cell taps | 4 sense taps per module to the BMS harness, **each tap fused** at the module | a chafed sense wire on a 400 V string must not become a fault path |
+| What the supervisor sees | the BMS's CAN broadcast: charge/discharge current limits, pack voltage, SOC, highest/lowest cell, alarms | the supervisor reads a **generic battery**. Another chemistry later means a different BMS config, not a rewrite |
+| Main contactors | **2 × EV HV DC contactor** (+ and −), 12 V coil (same type as the IM input contactor, I14: TE LEV100 or salvaged EV) | this is the string's switchgear. Loose modules have none of their own |
+| Precharge | relay + resistor across the + contactor | |
+| Coil drivers | from the BMS's contactor outputs, flyback diode per coil | |
+| Current sensor | the BMS's recommended Hall sensor, on the string cable | for SOC and current limits |
+| 12 V for BMS + coils | the 24→12 V DC-DC (C12) | |
+| String fuse | NH1 gPV **40 A**, **at the string end** of its cable | the source-end fuse protects the cable |
+| **Mid-string service disconnect** | a DC isolator between modules 12 and 13, splitting the string into two ~175 V halves; **off-load only** | standard EV practice. Opening it makes the string safer to work on, and the part is a commodity solar isolator |
+| String isolator | DC load-break isolator at the cabinet; off-load only | visible isolation |
+| E-stop | the series NC loop drops all contactor coil power in hardware | works with every computer hung |
 
-### 3.2 Contactor sequence [DECISION]
+### 3.3 Contactor sequence, per string [DECISION]
 
 ```
-OFF -> WAKE (12 V to LBC, wait for CAN) -> CHECK
-CHECK: LBC no faults, IMD OK, E-stop loop closed, supervisor "inverter OK"
-       (Battery-Emulator closes only when BOTH battery and inverter say OK)
--> PRECHARGE: close SMR- and PRE; bus rises through the pack precharge resistor
-   wait until V_bus >= 0.95 x V_pack (bus voltage sensed by the BIM), timeout 3 s -> FAULT
--> CLOSE SMR+, then open PRE  -> ON
-ON -> any fault / E-stop / supervisor off -> ramp IM and RM current to 0 (≤ 200 ms) -> open SMR+ then SMR-
+OFF -> BMS awake (12 V), all cells read -> CHECK
+CHECK: BMS no faults, IMD OK, E-stop loop closed, supervisor OK
+-> if the bus is DEAD (first string):
+     close -, close PRE; bus rises through the precharge resistor
+     wait V_bus >= 0.95 x V_string, timeout 3 s -> FAULT; close +, open PRE -> ON
+-> if the bus is LIVE (second string joining):
+     only if |V_string - V_bus| <= 2 V (~0.02 V/cell); else WAIT
+     (the supervisor steers charge/discharge current to the lower string until they match)
+     close -, close PRE (limits any residual step), close +, open PRE -> ON
+ON -> any fault / E-stop / supervisor off -> ramp IM and RM current to 0 (<= 200 ms) -> open + then -
 ```
 
-- **Bus capacitance limits precharge.** The Leaf's internal precharge resistor
-  was sized for the car's inverter. Total bus capacitance (all IM inputs + RM
-  outputs + cabling) must be checked against it. If it is too large, IMs
-  precharge their own input (§4.5) *after* the pack closes. **Open item:
-  measure the Leaf precharge resistor.**
-- **Periodic LBC reset.** Battery-Emulator's Leaf page notes that 40/62 kWh
-  packs drift out of balance long-term if the battery controller is never
-  restarted, so a periodic reset is mandatory. The supervisor schedules it at
-  night, with IMs on reserve (or loads briefly off) since the contactors open.
-  [DECISION: weekly, 03:00]
-- **Pack low-voltage cutoff: 300 V** (3.125 V/cell average) [DECISION]. It
-  gives up a few percent of capacity to keep the IM's link voltage high enough
-  for 240 V (§4.2). Cell-level limits from the LBC come first; 300 V is the
-  pack-average floor.
+- **Paralleling strings safely.** Two strings at different voltages joined
+  directly drive a large current between them. The 2 V join window and the
+  precharge path prevent that. Once joined, each string's current is
+  measured; the supervisor enforces the **lower** of each BMS's limits
+  times two, and alarms on a current split that drifts from ~50/50.
+- **Bus capacitance vs. precharge:** size the precharge resistor for the
+  total bus capacitance (IM inputs + RM outputs + cabling), time constant
+  ≤ ~0.5 s. [DECISION: value set once the IM input capacitance is fixed]
+- **Low-voltage cutoff: 300 V** per string (3.125 V/cell average)
+  [DECISION], to keep the IM link voltage high enough for 240 V (§4.2).
+  The BMS's per-cell limits come first; 300 V is the string-average floor.
 
-### 3.3 Pack mounting (hold)
+### 3.4 Mounting and thermal (hold)
 
-- Steel cradle bolted to structure; the pack strapped down, on rubber
-  isolators; **~400+ kg [ASSUMED], weigh it**.
-- A 62 kWh pack is ~40 mm taller than earlier Leaf packs (Battery-Emulator
-  wiki). Measure the pack in hand before building the cradle.
-- Ventilation: forced air through the battery space, exhausting outside the
-  hull. Heat and smoke detection wired to the supervisor **and** to the
-  wheelhouse alarm independently. The fire plan (ABYC E-13) is still an
-  open item.
+- **Racks:** each string sits in its own steel or aluminium rack, with the
+  modules on edge and ~10 mm air gaps. The rack is bolted to structure and
+  every module strapped down. Whether the Gen 3 module needs external
+  compression is **not published. Ask the seller/Nissan, and design the
+  rack to clamp if in doubt.** [ASSUMED no compression]
+- **Inter-module links:** tinned copper busbars, torqued to spec,
+  torque-striped, with **insulating covers on every terminal**; 23 links per
+  string. On a boat each is a vibration and corrosion risk: inspect them at
+  every haul-out and after heavy weather.
+- **Temperature:** BMS thermistors on at least 1 in 3 modules, plus the
+  battery-space fan (B11). Forced air across the racks, exhausting outside
+  the hull.
+- **Fire:** heat and smoke detection wired to the supervisor **and**
+  independently to the wheelhouse alarm; the fire plan (ABYC E-13) is still
+  an open item.
 
-### 3.4 Licence note
+### 3.5 Licence note
 
-Battery-Emulator is GPL-3.0. Running it unmodified on its own board creates
-no obligation. If we fork it, our changes to *that firmware* are GPL-3.0.
-Talking to it over CAN from the supervisor does not bring the supervisor
-under GPL.
+ENNOID-BMS, if chosen, is open-source hardware and firmware. Check its
+licence before modifying. Talking to any BMS over CAN brings no licence
+obligation to the supervisor.
+
+### 3.6 String-level fallbacks
+
+| What fails | Result | Fallback |
+|---|---|---|
+| One module | its string trips (cell limit) | swap in a spare module (§3.1 leftovers), re-balance. Or, as a **degraded** mode, rebuild that string at 23 modules (92S: 276–386 V, still inside the RM range) with the BMS reconfigured; less usable range above the 300 V cutoff |
+| One BMS, contactor or string fuse | that string opens | **the other string carries the boat** at 40 kWh; the supervisor halves the current limits |
+| Both strings | no battery | solar goes to the house-battery path (spec §10) |
 
 ## 4. Inverter module IM-3500
 
@@ -185,7 +234,7 @@ BUS 300-403 V -> [precharge] -> [LLC-DCX, 1:1.25, at resonance] -> LINK 375-504 
 - **Why 1:1.25:** 120 V per leg means ±170 V peak about a neutral leg held at
   V_link / 2, so V_link must be ≥ 340 V plus ~10 % for modulation and filter
   drop, i.e. **≥ 375 V**. That is reached at a 300 V bus, which is exactly why
-  the pack cutoff is 300 V (§3.2). [DERIVED]
+  the string cutoff is 300 V (§3.3). [DERIVED]
 - **Stage 2, a three-leg (four-wire) split-phase bridge.** Legs L1 and L2 at
   180°, and a third leg actively forming the neutral. The neutral leg carries
   imbalance current, so it is rated like a phase leg (21 A).
@@ -251,7 +300,7 @@ BUS 300-403 V -> [precharge] -> [LLC-DCX, 1:1.25, at resonance] -> LINK 375-504 
 
 Input switchgear: an EV-style HV DC contactor, 12 V coil, ≥ 450 V, plus a small
 precharge relay and resistor. EV contactors are everywhere EVs are
-scrapped, and the Leaf's own contactors are this type.
+scrapped, and the BIM string contactors (§3.2) are the same part.
 
 ### 4.6 Why the IM is not PoE-enabled (unlike the RM)
 
@@ -264,9 +313,9 @@ the IM:
   (300 V);
 - still stops on the **hardwired enable loop** (E-stop, BIM contactor state)
   and on any local protection;
-- the pack stays protected regardless. If the pack goes out of limits, the
-  battery controller, via Battery-Emulator, opens the contactors, the bus
-  collapses, and the IM stops.
+- the battery stays protected regardless. If a string goes out of limits,
+  its BMS opens that string's contactors. If both strings open, the bus
+  collapses and the IM stops.
 
 ## 5. Rail module, Phase 1 build (2S)
 
@@ -427,15 +476,15 @@ temporarily with stock M8 316 SS hardware in the same holes.
 | Item | Choice |
 |---|---|
 | Computer | Raspberry Pi 5, industrial-temp microSD or NVMe, in a DIN enclosure, 24→5 V supply |
-| CAN | 2-channel isolated CAN HAT. **CAN0** ↔ BIM Battery-Emulator board (battery protocol). **CAN1** ↔ IM bus (with IM sync pair separate) |
+| CAN | 2-channel isolated CAN HAT. **CAN0** ↔ the two string BMSs (distinct CAN IDs). **CAN1** ↔ IM bus (with IM sync pair separate) |
 | Switch | **MikroTik CRS112-8P-4S-IN**: 8 ports with per-port PoE-out control from RouterOS (scriptable/API). 802.3af/at output needs a 48–57 V input, so feed it from a 24→48 V DC-DC |
 | Network | the power VLAN is isolated from the boat LAN. The supervisor is the only bridge and forwards telemetry only (spec §6.2) |
-| Duties | read battery limits (CAN0); set RM current limits and heartbeat (Modbus TCP); set IM limits (CAN1); night PoE-off for RMs; weekly LBC reset; load-shed; publish to Signal K and add points to `schema/points.yaml` |
+| Duties | read battery limits (CAN0); set RM current limits and heartbeat (Modbus TCP); set IM limits (CAN1); night PoE-off for RMs; string join/matching (§3.3); load-shed; publish to Signal K and add points to `schema/points.yaml` |
 
 **Supervisor fallbacks.** (1) A spare Pi with a cloned, versioned image (in
 this repo). (2) A laptop with a USB-CAN adapter running the same software. (3)
 With no supervisor at all: the IMs keep powering loads (§4.6) and the RMs
-stop (fail-off), and the pack remains protected by Battery-Emulator + LBC.
+stop (fail-off), and each string stays protected by its own BMS and contactors.
 Solar then goes to the house-battery path (spec §10).
 
 ## 8. Wiring schedule
@@ -448,8 +497,9 @@ Solar then goes to the house-battery path (spec §10).
 | W3F (×2) | reserved fold-out RM → hold (pulled now, capped and labeled at both ends) | 6 mm² H1Z2Z2-K pair, same route | feeder space reserved |
 | W4 (×2) | RM ↔ PoE switch | Cat6 outdoor, shielded, UV | PoE port limit |
 | W4F (×2) | reserved fold-out RM ↔ switch (pulled now) | Cat6 outdoor | — |
-| W5 | pack HV → BIM | **25 mm² H1Z2Z2-K** pair, as short as possible | NH 40 A at the pack end |
-| W6 | pack LV connector → BIM | salvaged Leaf LV pigtail → 1.5 mm² tinned + twisted pair for CAN | 5 A blade fuse on 12 V |
+| W5 (×2) | string HV → BIM | **25 mm² H1Z2Z2-K** pair, as short as possible | NH 40 A at the string end |
+| W5a | inter-module links | tinned Cu busbars, torqued, covered; 23 per string | string fuse |
+| W6 (×2) | module sense taps → BMS | BMS harness, 4 taps per module, **fused at each tap** | tap fuses |
 | W7 | busbar → IM DC in | 4 mm² H1Z2Z2-K | 20 A gPV + isolator |
 | W8 | IM AC → AC test panel | 3 × 6 mm² (10 AWG) + PE, marine tinned (UL 1426 boat cable / H07RN-F) | 2-pole 20 A breaker + RCD/GFCI in panel |
 | W9 | CAN1 + sync pair | shielded twisted pair (DeviceNet/NMEA 2000-type or Cat6), 120 Ω terminated | — |
@@ -464,11 +514,12 @@ Run every DC pair **together** (compass deflection, EMI, spec §8.2).
 | Fault location | First to act | Backup |
 |---|---|---|
 | Short in a rail down-run | RM (current source, ≤ 4 A) + the pack side's 10 A gPV | side isolator (manual) |
-| Short on the bus in the cabinet | pack NH 40 A gPV | pack contactors via IMD/BIM |
-| IM internal short | IM 20 A gPV | pack NH fuse |
+| Short on the bus in the cabinet | both string NH 40 A gPV fuses | string contactors via IMD/BIM |
+| IM internal short | IM 20 A gPV | string NH fuses |
+| Short inside a string | string NH fuse (source end) + BMS opens contactors | mid-string disconnect (manual) |
 | AC short | IM current-limit, then the 20 A breaker clears | IM trip at 100 ms |
 | Insulation fault (bus to hull) | IMD warn → supervisor alarm | IMD trip threshold → contactors open |
-| Pack cell out of limits | LBC → Battery-Emulator opens contactors | supervisor ramps IM/RM to zero first when a limit is approached |
+| Cell out of limits | that string's BMS opens its contactors; the other string stays on | supervisor ramps IM/RM to zero first when a limit is approached |
 | Everything hangs | E-stop loop: coil power cut in hardware | — |
 
 Fuses are sized so the smallest one nearest the fault clears first (10 A /
@@ -478,9 +529,13 @@ Fuses are sized so the smallest one nearest the fault clears first (10 A /
 
 Each step passes before the next begins:
 
-1. **Cabinet dry:** wiring check, E-stop loop, IMD self-test, no pack connected.
-2. **BIM + pack, no load:** wake, read LBC, precharge onto the empty bus, close,
-   open. Log the precharge time. Pull the E-stop in every state.
+0. **Module inspection** (§3.1): all 48 modules through voltage, capacity and
+   resistance; build two matched strings of 24; the rest are spares.
+1. **Cabinet dry:** wiring check, E-stop loop, IMD self-test, no string connected.
+2. **BIM + string A, no load:** BMS reads all 96 cells; precharge onto the
+   empty bus, close, open. Log the precharge time. Pull the E-stop in every
+   state. Then **string B joins** a live bus: prove the 2 V join window, and
+   that the join is refused outside it.
 3. **RMs on the bench** (spec P0–P1b): the Sorensens in series (120 V /
    18 A) as the PV simulator, the DIY water-heater load bank as the load.
    Then prove bench CV mode (spec §5.3).
@@ -490,19 +545,20 @@ Each step passes before the next begins:
 5. **IM at full voltage, ~1 kW:** fed from a proven RM in **bench CV mode**
    (350–400 V, capacitor bank + bleeder), space-heater load. There is **no
    separate HV supply**: the RM is the supply.
-6. **IM on the pack:** resistive load to 3.5 kVA; an hour at full load; thermal survey.
+6. **IM on the battery:** resistive load to 3.5 kVA; an hour at full load; thermal survey; check the string current split.
 7. **Second IM:** parallel, sharing within 10 %; pull the sync pair (droop
    takes over), pull CAN, pull the master.
-8. **RMs on the rail** (spec P2), then into the pack (P3–P4).
-9. **Full chain:** sun → RM → bus → pack → IM → loads for a week; fallback
+8. **RMs on the rail** (spec P2), then into the battery (P3–P4).
+9. **Full chain:** sun → RM → bus → strings → IM → loads for a week; fallback
    drills (spec P5).
 
 ## 11. Open items (Phase 1)
 
 1. Panel datasheet (Voc, Isc, max system voltage); spec §12.1 still blocks the 4S future.
-2. Leaf internal precharge resistor value vs. total bus capacitance (§3.2).
-3. Leaf pack weight and dimensions in hand (§3.3); LV connector pinout on
-   this pack (confirm against Battery-Emulator's Leaf wiki).
+2. Precharge resistor value vs. total bus capacitance (§3.3).
+3. Leaf Gen 3 module: whether it needs external compression; sense-tap access; seller answers
+   (lot size, generator BMS logs, storage history).
+3a. BMS choice: Orion BMS 2 (≥ 96-cell version) vs ENNOID-BMS; two units.
 4. Fire, ventilation and detection plan for the battery space (ABYC E-13).
 5. Transfer switching between shore/genset and the IM AC output; where Phase
    1's AC panel ties in (not to the 440 V bus).

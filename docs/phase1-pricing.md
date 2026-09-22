@@ -18,17 +18,21 @@ included. Conversions assumed €1 = $1.15 and NZ$1 = $0.58.
 | Down-runs (2 pairs + 2 Cat6 per side, tracker 24 V feed) | 1,070 | 1,302 | |
 | Rail modules (3 built) | 1,624 | 2,049 | enclosure size, PCB fab |
 | Hold cabinet | 2,430 | 3,372 | generic vs branded fuse holders; the insulation monitor alone is $978 |
-| BIM, **including the Leaf pack** | 5,491 | 12,965 | the pack: $4,450–10,600 with freight |
+| **Battery: 48 Leaf modules (80 kWh) + 2 BIMs** | 12,045 | 17,401 | modules $7,680 + freight $200–600; two BMSs $1.6–2.8k; racks, fuses, contactors |
 | Inverter modules (2 built) | 2,417 | 3,115 | |
 | Supervisor + network | 839 | 1,128 | |
 | AC test panel | 473 | 778 | |
-| Spares | 272 | 333 | |
-| **Phase 1 total (excl. test gear)** | **~18,100** | **~32,400** | |
-| of which the Leaf pack | 4,450 | 10,600 | |
-| **Phase 1 without the pack** | **~13,600** | **~21,800** | |
+| Spares (incl. 2 spare modules if the seller has them) | 272 | 653 | |
+| **Phase 1 total (excl. test gear)** | **~24,600** | **~37,100** | |
+| of which modules + freight | 7,880 | 8,280 | 80 kWh at ~$96/kWh |
+| **Phase 1 without the modules** | **~16,800** | **~28,900** | |
 | Test gear to buy (owner has none of T02, T03, T05–T10) | 1,903 | 2,603 | budget options; T02 and T03 are built (RM bench CV mode, water-heater load bank); T11/T12 optional |
-| **Phase 1 all-in (incl. test gear)** | **~20,000** | **~35,000** | |
-| **All-in without the pack** | **~15,500** | **~24,400** | |
+| **Phase 1 all-in (incl. test gear)** | **~26,500** | **~39,800** | |
+
+The battery went from a used 62 kWh pack ($4,450–10,600, its own controller) to
+48 loose modules (80 kWh, one 2023 lot) with two BMSs. More capacity, hand-carried
+8.7 kg pieces, and two independent strings; the price is the BMSs and switchgear
+the pack used to include.
 
 ## Test equipment: check against your bench
 
@@ -66,10 +70,11 @@ Salisbury GK011R ($165). Sources are in the BOM.
    exists today; buy with spares.
 4. **Omron G2RG-2A-X DC12** (RM output relay, IM precharge): 0 stock, 62
    due Oct 14. Check its coil power against the RM's 13 W PoE budget.
-5. **Leaf pack:** the market is thin, and none turned up in Indonesia. Ask any
-   seller for a LeafSpy state-of-health screenshot, the LV and HV pigtails
-   from the donor car, and its weight (315–366 kg reported). Ships as Class 9
-   (UN3480) freight.
+5. **Leaf modules:** ask the seller for the lot size (48 needed; 50 gives 2
+   spares), the generator's BMS logs/cycle count, current module voltages,
+   storage history, and whether busbars and sense connectors are included.
+   Ships Class 9 (UN3480) ground freight. Inspect every module on arrival
+   (LLD §3.1).
 
 ## Corrections the pricing pass made to the BOM
 

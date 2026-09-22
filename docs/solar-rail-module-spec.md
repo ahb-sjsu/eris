@@ -2,7 +2,7 @@
 
 The rail module is the power converter that takes one group of four solar
 panels on a rail tracker and pushes their power down a shared ~350 V DC bus
-into the Leaf battery pack in the hold. Six identical modules, three per side.
+into the Leaf-module battery in the hold (two strings of 24 modules, 80 kWh). Six identical modules, three per side.
 It is programmable, networked, and powered and enabled over PoE.
 
 This is a design spec, not a record of built hardware. Following this repo's
@@ -22,12 +22,12 @@ PORT TRACKER (12 panels)                       HOLD
  [4S]->[RM-P3]--+                              | bus disconnect             |
                                                | insulation monitor         |
 STARBOARD TRACKER (12 panels)                  |        |                   |
- [4S]->[RM-S1]--+                              | pack contactors+precharge  |
+ [4S]->[RM-S1]--+                              | string contactors+precharge|
  [4S]->[RM-S2]--+==== 350 V DC, stbd run ====> |        |                   |
- [4S]->[RM-S3]--+                              | Leaf 62 kWh, 96S3P         |
+ [4S]->[RM-S3]--+                              | 2 strings x 96S2P, 80 kWh  |
                                                |                            |
  all RMs <======== Ethernet + PoE ===========> | PoE switch -> supervisor   |
-                                               | supervisor <-CAN-> Leaf LBC|
+                                               | supervisor <-CAN-> 2 BMSs  |
                                                +----------------------------+
 ```
 
@@ -81,7 +81,7 @@ verified. Measure one panel in P2 (§11).
 
 | Quantity | Value | Source |
 |---|---|---|
-| Pack configuration | 96S3P, 288 cells, 16 modules (4×7S3P, 8×4S3P, 4×9S3P) | Leaf 62 kWh, published teardown data |
+| Battery configuration | 2 strings in parallel, each 24 Leaf Gen 3 modules (4S2P) in series = 96S2P, 40 kWh; 80 kWh total | Phase 1 LLD §3 |
 | Pack voltage range | 288–403 V (3.0–4.2 V/cell) | [DERIVED] from 96S NMC |
 | Nominal | ~350 V | [DERIVED] 96 × 3.65 V |
 | **Operating output range** | **250–420 V** | [DECISION] margin both ends |
@@ -90,7 +90,7 @@ verified. Measure one panel in P2 (§11).
 | Reverse current | **zero, blocked** | the pack must never back-feed a module |
 
 Six modules at full sun put ~14 A into the pack (4.8 kW nameplate at
-~350 V), under 0.1C for the pack, well within Leaf charge ratings. Each
+~350 V), under 0.1C for the 80 kWh battery, well within Leaf charge ratings. Each
 side's run normally carries ~7 A; it is fused and rated for the modules'
 4 A maximum each (≤ 12 A per side).
 
@@ -266,7 +266,7 @@ average) to zero at **V_stop = 401 V** (4.177 V/cell). [DECISION] Configurable.
 
 **This is a backstop, not charge control.** Bus voltage is the pack
 *average*. A high cell can reach 4.2 V while the average is lower. Real
-charge termination comes from the Leaf battery controller's per-cell data,
+charge termination comes from each string BMS's per-cell data,
 passed through the supervisor as the network limit (section 5.1, item 2).
 
 ## 7. Protection and fault handling
@@ -335,7 +335,7 @@ not when they fail.
 
 **Fallback if the modules all fail:** each side's 12 panels still have MC4
 leads, so any off-the-shelf MPPT charger that fits the panels can charge
-a 12/24 V house battery directly. It doesn't help the Leaf pack, but
+a 12/24 V house battery directly. It doesn't help the Leaf battery, but
 you get limping power from parts sold anywhere. [DECISION: owner to
 confirm this is wanted]
 
@@ -367,16 +367,14 @@ confirm this is wanted]
 - **Combiner:** one fuse per module (gPV class, ≥ 600 VDC, ~6 A) and one
   DC-rated disconnect per side.
 - **Bus insulation monitor** on the 350 V bus relative to hull.
-- **Pack contactors and precharge.** In the car these are driven by the
-  vehicle controller, not the battery controller, so on Eris the supervisor
-  must drive them. Build and test this interlock chain before any module
-  connects to the pack.
-- **Supervisor:** reads the Leaf battery controller over CAN (the Battery-Emulator
-  project's Leaf 62 kWh decoding is the starting point), computes module
-  current limits from the controller's charge-power limit and cell data,
+- **String contactors and precharge**, one set per string, driven by that
+  string's BMS (Phase 1 LLD §3.3). Build and test this interlock chain
+  before any rail module connects to the battery.
+- **Supervisor:** reads both string BMSs over CAN, computes rail-module
+  current limits from the lower of their charge limits and the cell data,
   runs the heartbeat, switches PoE ports, and publishes to Signal K.
 - Relation to `software/bms/`: that code covers the 24 V lead-acid starting
-  banks. The Leaf pack supervisor is a separate program. They can share
+  banks. The solar/battery supervisor is a separate program. They can share
   the Signal K integration pattern.
 
 ## 10. Fallback paths
@@ -394,14 +392,14 @@ section 8.1 parts or equipment already aboard.
 | One tracker drive | that side can't track | pin the tracker flat (0°, which is also the stow position) and run fixed; expect roughly 20–30 % less from that side [ASSUMED] | manual lock pin on each tracker |
 | PoE switch | all modules stop (by design) | swap in a spare managed PoE switch, or use **single-port PoE injectors** (commodity) on any switch, one per module | 1 spare switch or 6 injectors |
 | Supervisor computer | heartbeats stop, all modules ramp to zero (safe) | boot the **spare supervisor**: identical SD card image or disk, on a spare board, or on a laptop with a USB-CAN adapter (the image must run on commodity hardware) | spare board + image, versioned in this repo |
-| Leaf battery controller or its CAN link | no per-cell data, so the supervisor must not charge the pack | **no fallback charging of the pack** (charging NMC without cell monitoring is not a safe fallback); switch to the house-battery path below | — |
-| Whole converter system (all modules, supervisor, or the pack itself) | no charging into the Leaf pack | **house-battery path:** the MC4 panel leads go to any off-the-shelf MPPT charger (12/24/48 V, sold everywhere) charging a lead-acid or LiFePO4 house battery. The input window per string is still 4S | one stock MPPT charger aboard, pre-wired to a changeover point |
-| One Leaf module (cell group) | pack faults | the converters' output range (250–420 V) still covers the pack with one 4S module removed (92S: 276–386 V), so the **converter side** tolerates it. The Leaf battery controller expects 96 cells and will not; this needs a BMS that can be reconfigured. **Open item**, not yet a working fallback | future BMS decision |
+| One string's BMS or its CAN link | no per-cell data for that string | that string's contactors open; **the other string carries on** at half capacity with halved limits. A string is never charged without cell monitoring | two independent BMSs |
+| Whole converter system (all modules, supervisor, or both strings) | no charging into the Leaf battery | **house-battery path:** the MC4 panel leads go to any off-the-shelf MPPT charger (12/24/48 V, sold everywhere) charging a lead-acid or LiFePO4 house battery. The input window per string is still 4S | one stock MPPT charger aboard, pre-wired to a changeover point |
+| One Leaf module | its string trips | swap in a spare module (carried aboard). Degraded mode: rebuild the string at 23 modules (92S: 276–386 V, inside the converters' 250–420 V range) with the BMS reconfigured | spare modules; configurable BMS (Phase 1 LLD §3.6) |
 | Network with a working supervisor (e.g. a flaky link to one module) | that module stops (heartbeat timeout) | the others continue; the supervisor logs which module keeps timing out | — |
 | Module firmware bug in the field | module misbehaves | every module keeps a **known-good firmware image** alongside the update slot, and the bootloader falls back to it; a physical jumper forces it | A/B firmware slots |
 
-**What deliberately has no fallback:** anything that would charge the Leaf
-pack without cell-level monitoring, or let a module run without a live
+**What deliberately has no fallback:** anything that would charge a Leaf
+string without cell-level monitoring, or let a module run without a live
 link from the hold. Those are the protections. Bypassing them is not a
 fallback.
 
@@ -413,7 +411,7 @@ fallback.
 | P1 | Full module: PV simulator (2× Sorensen DCS60-18E in series, with a series resistor for a sloped I-V curve) in, DIY water-heater load bank out | MPPT tracks ≥ 99 % of simulator MPP; every section-7 fault fires when injected, **and the right one fires** |
 | P1b | Bench CV mode (section 5.3): capacitor bank + bleeder on the output, load bank stepped | output holds setpoint ±1 % from 0 to 1 kW; the bench jumper blocks heartbeat and Modbus writes; pulling PoE stops it |
 | P2 | One module on 4 real panels, into a bench HV load | real Voc/Isc/Vmp logged, replacing every [ASSUMED] in section 2 |
-| P3 | Supervisor + one module + Leaf pack, with contactors | PoE loss, heartbeat loss and cable pull each stop output within spec |
+| P3 | Supervisor + one module + one Leaf string, with contactors | PoE loss, heartbeat loss and cable pull each stop output within spec |
 | P4 | All six modules | per-side harvest logged; night PoE cut works; a week of insulation trend |
 | P5 | Fallback drills | each section-10 fallback done once for real (panel bypass, module swap, side isolation, injector swap, spare supervisor boot, house-battery changeover), with the time it took written down |
 
@@ -431,9 +429,8 @@ never seen to fire isn't verified.
    the insurer** before installing (policy docs are in `yacht/`).
 4. **Tracker mechanics:** axis orientation, ±90° drive, stow position and
    wind limit, green-water loading on the rail. That's a separate spec.
-5. **Leaf pack interface:** contactor drive, battery controller CAN
-   compatibility (Battery-Emulator), and thermal management of an air-cooled
-   pack in the hold.
-6. **Fire and ventilation plan** for 62 kWh of NMC in the hold (ABYC E-13).
+5. **Leaf battery interface:** see Phase 1 LLD §3 (two strings, BMS
+   choice, module compression, rack thermal design).
+6. **Fire and ventilation plan** for 80 kWh of NMC in the hold (ABYC E-13).
 7. **Load side:** how the pack feeds ship's loads (the 440 V delta bus or
    something else). Independent of this spec.

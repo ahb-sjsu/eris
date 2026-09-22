@@ -73,19 +73,24 @@ C12,cabinet,24->12 V DC-DC,">=10 A, isolated",e.g. Victron Orion / Mean Well,1,1
 C13,cabinet,24->48 V DC-DC,>=100 W,Mean Well DDR-120B-48 (SD-100B-48 does not exist),1,1,1,COMMODITY,48 V is the bottom of the switch 48-57 V PoE input range; check whether output trims up,88.66,88.66,QUOTE,trcelectronics DDR-120B-48
 C14,cabinet,24 V aux breaker + distribution,DIN,generic,1 set,1,1,COMMODITY,,60.00,120.00,EST (research),
 C15,cabinet,Cable lugs/ferrules/DIN rail/ducting,,generic,1 lot,1,1,COMMODITY,,100.00,200.00,EST (research),
-# BATTERY INTERFACE MODULE (BIM x1),,,,,,,,,,,,,
-B01,BIM,Leaf 62 kWh pack,"96S3P, used, with LBC + internal SMR/PRE",salvage,1,1,1,SALVAGE,weigh + measure in hand; get LV + HV pigtails with it,4450.00,10600.00,SNIPPET,salvage $4150 / private $9800 / evshop.eu EUR 6899; + LTL freight $300-800 EST
-B02,BIM,Leaf LV connector pigtail,from donor vehicle,salvage,1,1,1,SALVAGE,,35.00,35.00,QUOTE,evsenhanced.com NZ$60
-B03,BIM,Leaf HV connector pigtail,from donor vehicle,salvage,1,1,1,SALVAGE,or lug direct if pack permits,46.00,46.00,QUOTE,evsenhanced.com NZ$80
-B04,BIM,Battery-Emulator board,ESP32 + CAN,LilyGO T-CAN485 or T-2CAN,2,1,2,ELECTRONICS,1 + 1 spare (flashed),41.40,65.96,SNIPPET,openelab T-CAN485 / AliExpress T-2CAN
-B05,BIM,Contactor drivers,12 V SSR or automotive relay + flyback diode,generic,3,1,3,COMMODITY,SMR+ / SMR- / PRE; + 1 spare,20.00,49.00,SNIPPET,
-B06,BIM,Pack main fuse,NH1 gPV 40 A 1000 V,generic,2,1,2,COMMODITY,1 + 1 spare; upgrade later (LLD 2.1),148.00,827.00,QUOTE,em.co.za DF 373225 / aiconsol Bussmann PV-40ANH1
-B07,BIM,NH1 fuse base,">=160 A, 1000 V DC",generic,1,1,1,COMMODITY,,199.06,199.06,QUOTE,platt.com Eaton SD1-D-PV
-B08,BIM,Pack isolator,"DC load-break isolator >=600 V, >=63 A",generic solar isolator,1,1,1,COMMODITY,off-load use only,89.00,250.00,QUOTE,vxb.com 2P 63 A (confirm load-break)
-B09,BIM,Pack HV cable,25 mm2 H1Z2Z2-K,generic,2x3 m,1,6 m,COMMODITY,"metric 25 mm2; US 4 AWG (21 mm2) is undersize, use 3 AWG",30.00,60.00,EST (mine),25 mm2 H1Z2Z2-K
-B10,BIM,Pack cradle,"steel frame, rubber isolators, straps",fabricated,1,1,1,FAB,,300.00,700.00,EST (research),welded frame
-B11,BIM,Battery space fan,"exhaust, ignition-protected",generic marine blower,1,1,1,COMMODITY,,62.80,62.80,QUOTE,fisheriessupply Attwood 1751-1
-B12,BIM,Smoke/heat detector,with relay output,generic,1,1,1,COMMODITY,,69.95,69.95,SNIPPET,System Sensor 4WTR-B
+# BATTERY: 2 strings x 24 Leaf modules + 2 BIMs,,,,,,,,,,,,,
+B01,BIM,Leaf Gen 3 module,"4S2P NMC (AESC), 14.6 V nom / 16.8 V max, 112 Ah, 1.67 kWh, 319x222x68 mm, 8.7 kg","eBay seller chalupien lot (2023, ex-80 kWh generator, never in a car)",24,2,48,SALVAGE,inspect all on arrival (LLD 3.1); Best Offer on the lot,7680.00,7680.00,QUOTE,eBay listing $160/ea (owner-provided 2026-09-22)
+B02,BIM,Module freight,"Class 9 (UN3480) ground, ~420 kg",-,1,1,1,SALVAGE,,200.00,600.00,EST (mine),LTL estimate
+B03,BIM,BMS,"Orion BMS 2, version covering >=96 cells (or ENNOID-BMS)",Orion BMS 2,1,2,2,ELECTRONICS,one per string (independent fallback),1610.00,2760.00,SNIPPET,"bms-ev.com 2026 comparison: EUR 700-1,200"
+B04,BIM,String current sensor,BMS-recommended Hall sensor,per BMS maker,1,2,2,ELECTRONICS,,120.00,300.00,EST (mine),
+B05,BIM,Cell tap harness + tap fuses,"4 taps/module, inline fuse at each tap",BMS harness + inline fuses,1,2,2,ELECTRONICS,96 taps per string,200.00,500.00,EST (mine),
+B06,BIM,String main fuse,NH1 gPV 40 A 1000 V,DF Electric 373225 / Bussmann PV-40ANH1,1,2,3,COMMODITY,2 + 1 spare,222.00,1240.00,QUOTE,as priced earlier (em.co.za / aiconsol)
+B07,BIM,NH1 fuse base,">=160 A, 1000 V DC",Eaton SD1-D-PV,1,2,2,COMMODITY,,398.12,398.12,QUOTE,platt.com
+B08,BIM,String isolator,"DC load-break isolator >=600 V, >=63 A",generic solar isolator,1,2,2,COMMODITY,off-load use only,178.00,500.00,QUOTE,vxb.com 2P 63 A (confirm load-break)
+B09,BIM,String HV cable,25 mm2 H1Z2Z2-K,generic,2x3 m,2,12 m,COMMODITY,US 4 AWG is undersize; use 3 AWG,60.00,120.00,EST (mine),
+B10,BIM,Module rack,"steel/Al rack, modules on edge, ~10 mm gaps, strapped, bolted to structure",fabricated,1,2,2,FAB,clamp if compression is required (open item),600.00,1600.00,EST (mine),
+B11,BIM,Battery space fan,"exhaust, ignition-protected",Attwood 1751-1,1,1,1,COMMODITY,,62.80,62.80,QUOTE,fisheriessupply
+B12,BIM,Smoke/heat detector,with relay output,System Sensor 4WTR-B,1,1,1,COMMODITY,,69.95,69.95,SNIPPET,
+B13,BIM,String contactors,"EV HV DC contactor, 12 V coil, >=450 V, >=100 A",TE LEV100 or salvaged EV (as I14),2,2,4,COMMODITY,+ and - per string,220.00,516.00,QUOTE,as I14
+B14,BIM,Precharge relay + resistor,>=450 V DC relay; resistor sized to bus capacitance,Omron G2RG-2A-X DC12 + TE HSA50100RJ (as I15),1,2,2,ELECTRONICS,,56.02,56.02,QUOTE,as I15
+B15,BIM,Mid-string service disconnect,"DC isolator >=600 V, >=63 A between modules 12 and 13",generic solar isolator (as B08),1,2,2,COMMODITY,off-load only,178.00,500.00,QUOTE,as B08
+B16,BIM,Inter-module busbars + covers,"tinned Cu, torque-striped, insulating terminal covers",fabricated/generic,23,2,46,COMMODITY,,150.00,400.00,EST (mine),
+B17,BIM,Contactor drivers,12 V relay/SSR + flyback diode,generic,3,2,6,COMMODITY,from BMS contactor outputs,40.00,98.00,SNIPPET,
 # INVERTER MODULE IM-3500 (build 2),,,,,,,,,,,,,
 I01,IM,Controller board,TI C2000 F28003x LaunchPad,LAUNCHXL-F280039C,1,2,2,ELECTRONICS,same as RM,117.60,117.60,SNIPPET,mouser
 I02,IM,SiC MOSFET (all 14 switches),"1200 V, ~75 mOhm, TO-247",e.g. Wolfspeed C3M0075120D,14,2,28,ELECTRONICS,ONE part number; + spares below,266.28,266.28,QUOTE,digikey C3M0075120D (qty-1 price; upper bound)
@@ -127,6 +132,7 @@ A05,AC,AC test load,2x 120 V 1500 W open-coil space heaters (one per leg) + 1x 2
 # SPARES (fallback rule),,,,,,,,,,,,,
 P01,spares,MC4 pairs + bypass jumpers + pigtails,,generic,14,1,14,COMMODITY,panel bypass (spec 10) + wear pigtails,66.92,66.92,QUOTE,as R08
 P08,spares,Ball-lock pins,as R16,,4,1,4,COMMODITY,lanyards break; pins go overboard,40.00,100.00,EST (mine),
+P09,spares,Spare Leaf Gen 3 modules,as B01,,2,1,2,SALVAGE,"IF the seller has more than 48 (48 = both strings, no spares); else spares come from the next lot",0.00,320.00,QUOTE,as B01
 P02,spares,10x38 gPV fuses 10/20 A,,generic,4,1,4,COMMODITY,,35.96,35.96,QUOTE,as C04
 P03,spares,200 V Si MOSFET,M04,,6,1,6,ELECTRONICS,,21.66,21.66,QUOTE,
 P04,spares,1200 V SiC MOSFET,I02,,6,1,6,ELECTRONICS,,57.06,57.06,QUOTE,
