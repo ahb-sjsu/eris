@@ -1,0 +1,131 @@
+line,assembly,item,spec,example_part,qty_per,assy_qty,total_qty,sourcing,notes
+# RAIL ASSEMBLY (x2: port + starboard),,,,,,,,,
+R01,rail,Solar panel,"250 W [LISTING], mono, 18.7 V Vmp, 55.12x28.94 in",WERCHTAY 2112,2,2,4,COMMODITY,no NRTL listing; get datasheet (Voc/Isc/max system V) before buying
+R02,rail,Strut channel,"41x41 mm slotted, 316 SS or hot-dip galvanized",Unistrut P1000-type,6 m,2,12 m,COMMODITY,cut to fit frame
+R03,rail,Rail clamp U-bolt,316 SS sized to stanchion OD,generic,4,2,8,COMMODITY,measure stanchion OD
+R04,rail,Panel mid/end clamps,for 60 mm (2.36 in) frame,generic PV clamps,4,2,8,COMMODITY,
+R05,rail,Tilt pivot + lock pin,"316 SS pin, 5 positions -60..+60 deg",fabricated,1,2,2,FAB,tracker deferred
+R06,rail,Isolating washers/sleeves,nylon or G10,generic,1 kit,2,2,COMMODITY,Al frame vs SS/steel
+R07,rail,PV cable string leads,4 mm2 H1Z2Z2-K red+black,generic,6 m,2,12 m,COMMODITY,
+R08,rail,MC4 connector pairs,MC4 1000/1500 V,Staubli MC4 or compatible,4,2,8,COMMODITY,+ spares below
+R09,rail,Sun/spray shield for RM,Al or SS sheet,fabricated,1,2,2,FAB,
+R10,rail,Frame bond strap,tinned Cu braid + lugs to hull ground,generic,1,2,2,COMMODITY,
+# DOWN-RUNS (x2),,,,,,,,,
+D01,downrun,DC bus cable,6 mm2 H1Z2Z2-K 1.5 kV tinned,generic,2x35 m,2,140 m,COMMODITY,run length ASSUMED ~30 m; measure
+D02,downrun,Ethernet outdoor,"Cat6 S/FTP, UV jacket",generic,35 m,2,70 m,COMMODITY,
+D03,downrun,Conduit/clips,UV-rated conduit or SS clips every 450 mm,generic,1 lot,2,2,COMMODITY,
+D04,downrun,Deck/bulkhead glands,IP68 nylon or SS,generic,4,2,8,COMMODITY,
+D05,downrun,Labels,"""350 V DC"" and ""PV LIVE IN DAYLIGHT""",generic,1 set,2,2,COMMODITY,
+# RAIL MODULE RM (build 3 = 2 + 1 spare; board rated 1.1 kW / 4S),,,,,,,,,
+M01,RM,Controller board,TI C2000 F28003x LaunchPad,LAUNCHXL-F280039C,1,3,3,ELECTRONICS,production: MCU on power board
+M02,RM,Ethernet module,SPI Ethernet,WIZnet WIZ850io (W5500),1,3,3,ELECTRONICS,
+M03,RM,PoE PD module,"802.3af, 12 V out, ~13 W",Silvertel Ag9912M,1,3,3,ELECTRONICS,powers all gate drive (spec 6.1)
+M04,RM,Boost MOSFET,"200 V Si, TO-220, <=15 mOhm",e.g. Infineon IPP110N20N3 G,2,3,6,ELECTRONICS,verify; any 200 V TO-220 of similar Rds/Qg substitutes
+M05,RM,DCX primary MOSFET,"200 V Si, TO-220",same as M04,4,3,12,ELECTRONICS,one part number with M04
+M06,RM,DCX secondary diode,"650 V SiC Schottky, 10 A, TO-220",e.g. Wolfspeed C3D10065A,4,3,12,ELECTRONICS,bridge rectifier; blocks reverse current
+M07,RM,Gate driver,"isolated dual-channel, 4 A",TI UCC21520,3,3,9,ELECTRONICS,
+M08,RM,Boost inductor,"~50 uH, 25 A sat, powder core",e.g. Kool Mu toroid wound,1,3,3,ELECTRONICS,value set in design
+M09,RM,DCX transformer core,"ETD39/44 ferrite, N97/3C95 class",TDK/Ferroxcube ETD,1,3,3,ELECTRONICS,buy spares with build (long lead)
+M10,RM,Litz wire,"e.g. 100x0.1 mm",generic,5 m,3,15 m,ELECTRONICS,
+M11,RM,Resonant capacitor,"polypropylene film, 630 V, low ESR",generic,2,3,6,ELECTRONICS,value set in design
+M12,RM,Input capacitors,"film/electrolytic, 160 V, 105 C",generic,1 set,3,3,ELECTRONICS,
+M13,RM,Output capacitors,"film, 630 V",generic,1 set,3,3,ELECTRONICS,
+M14,RM,Isolated voltage amp,output voltage sense,TI AMC1311,1,3,3,ELECTRONICS,
+M15,RM,Isolated shunt amp,output current sense,TI AMC1301,1,3,3,ELECTRONICS,
+M16,RM,Input current sense,shunt + amp,TI INA240 + shunt,1,3,3,ELECTRONICS,
+M17,RM,Isolated aux DC-DC,"1-2 W, 12->5 V, reinforced isolation",e.g. Murata NXE/MGJ series,1,3,3,ELECTRONICS,secondary-side sensing supply
+M18,RM,Output relay,"HV DC relay >=450 V, >=10 A, 12 V coil",EV-type HV DC relay,1,3,3,ELECTRONICS,coil on PoE power: lost PoE = open
+M19,RM,NTC sensors,10k,generic,3,3,9,ELECTRONICS,heatsink / magnetics / enclosure
+M20,RM,Power PCB,"4-layer, 2 oz Cu",fab house,1,3,3,FAB,order 5
+M21,RM,Enclosure,"IP66/67 die-cast Al, ~250x200x100 mm",e.g. Hammond 1550-series,1,3,3,COMMODITY,
+M22,RM,Heatsink,external extruded Al,generic,1,3,3,COMMODITY,
+M23,RM,Cable glands,"M20/M25 nylon IP68",generic,4,3,12,COMMODITY,PV in / bus out / Cat6
+M24,RM,Terminal block,"DIN, 1000 V, 6 mm2",generic,2,3,6,COMMODITY,bus output (no connector: spec 8)
+M25,RM,RJ45 jack (internal),shielded,generic,1,3,3,ELECTRONICS,
+M26,RM,Passives/connectors lot,per schematic,-,1,3,3,ELECTRONICS,
+# HOLD CABINET,,,,,,,,,
+C01,cabinet,Enclosure,"IP66 steel/SS, ~800x600x300 mm, mounting plate",generic,1,1,1,COMMODITY,
+C02,cabinet,Busbars,"Cu >=100 A, finger-safe cover, DIN insulators",generic,2,1,2,COMMODITY,+BUS / -BUS
+C03,cabinet,Rail feeder fuse holder,"10x38 gPV, 2-pole, 1000 V",generic,1,2,2,COMMODITY,
+C04,cabinet,Rail feeder fuse,10x38 gPV 10 A 1000 V,generic,2,2,4,COMMODITY,
+C05,cabinet,Rail feeder isolator,"2-pole DC isolator 1000 V, 32 A",generic solar isolator,1,2,2,COMMODITY,
+C06,cabinet,IM feeder fuse holder,"10x38 gPV, 2-pole",generic,1,2,2,COMMODITY,slot 1 + slot 2
+C07,cabinet,IM feeder fuse,10x38 gPV 20 A 1000 V,generic,2,2,4,COMMODITY,
+C08,cabinet,IM feeder isolator,"2-pole DC isolator 1000 V, 32 A",generic,1,2,2,COMMODITY,
+C09,cabinet,Bus SPD,"Type 2 PV SPD, 1000 V DC",generic,1,1,1,COMMODITY,
+C10,cabinet,Insulation monitor,EV-type IMD with fault output,Bender IR155-series,1,1,1,ELECTRONICS,
+C11,cabinet,E-stop buttons,"NC mushroom, latching",generic,2,1,2,COMMODITY,hold + wheelhouse
+C12,cabinet,24->12 V DC-DC,">=10 A, isolated",e.g. Victron Orion / Mean Well,1,1,1,COMMODITY,LBC + contactor coils
+C13,cabinet,24->48 V DC-DC,">=100 W",e.g. Mean Well SD-100B-48,1,1,1,COMMODITY,feeds PoE switch for 802.3af/at
+C14,cabinet,24 V aux breaker + distribution,DIN,generic,1 set,1,1,COMMODITY,
+C15,cabinet,Cable lugs/ferrules/DIN rail/ducting,,generic,1 lot,1,1,COMMODITY,
+# BATTERY INTERFACE MODULE (BIM x1),,,,,,,,,
+B01,BIM,Leaf 62 kWh pack,"96S3P, used, with LBC + internal SMR/PRE",salvage,1,1,1,SALVAGE,weigh + measure in hand; get LV + HV pigtails with it
+B02,BIM,Leaf LV connector pigtail,from donor vehicle,salvage,1,1,1,SALVAGE,
+B03,BIM,Leaf HV connector pigtail,from donor vehicle,salvage,1,1,1,SALVAGE,or lug direct if pack permits
+B04,BIM,Battery-Emulator board,ESP32 + CAN,LilyGO T-CAN485 or T-2CAN,2,1,2,ELECTRONICS,1 + 1 spare (flashed)
+B05,BIM,Contactor drivers,"12 V SSR or automotive relay + flyback diode",generic,3,1,3,COMMODITY,SMR+ / SMR- / PRE; + 1 spare
+B06,BIM,Pack main fuse,NH1 gPV 40 A 1000 V,generic,2,1,2,COMMODITY,1 + 1 spare; upgrade later (LLD 2.1)
+B07,BIM,NH1 fuse base,">=160 A, 1000 V DC",generic,1,1,1,COMMODITY,
+B08,BIM,Pack isolator,"DC load-break isolator >=600 V, >=63 A",generic solar isolator,1,1,1,COMMODITY,off-load use only
+B09,BIM,Pack HV cable,25 mm2 H1Z2Z2-K,generic,2x3 m,1,6 m,COMMODITY,
+B10,BIM,Pack cradle,"steel frame, rubber isolators, straps",fabricated,1,1,1,FAB,
+B11,BIM,Battery space fan,"exhaust, ignition-protected",generic marine blower,1,1,1,COMMODITY,
+B12,BIM,Smoke/heat detector,with relay output,generic,1,1,1,COMMODITY,
+# INVERTER MODULE IM-3500 (build 2),,,,,,,,,
+I01,IM,Controller board,TI C2000 F28003x LaunchPad,LAUNCHXL-F280039C,1,2,2,ELECTRONICS,same as RM
+I02,IM,SiC MOSFET (all 14 switches),"1200 V, ~75 mOhm, TO-247",e.g. Wolfspeed C3M0075120D,14,2,28,ELECTRONICS,ONE part number; + spares below
+I03,IM,Gate driver,isolated dual-channel,TI UCC21520,7,2,14,ELECTRONICS,4 DCX + 3 bridge legs
+I04,IM,Gate-drive DC-DC,"isolated +15/-4 V, 2 W",e.g. Murata MGJ2 series,7,2,14,ELECTRONICS,
+I05,IM,DCX transformer core,"PQ50/ETD59 ferrite, N97/3C95 class",TDK/Ferroxcube,1,2,2,ELECTRONICS,1:1.25; buy spares
+I06,IM,Litz wire,,generic,10 m,2,20 m,ELECTRONICS,
+I07,IM,Resonant capacitor,"PP film, 1000 V",generic,1 set,2,2,ELECTRONICS,
+I08,IM,Link capacitors,"1200 uF 450 V electrolytic, 105 C",generic,2,2,4,ELECTRONICS,in series + balancing resistors
+I09,IM,Film decoupling,"1 uF-5 uF, 800 V",generic,3,2,6,ELECTRONICS,one per leg
+I10,IM,Output inductors,"~0.5 mH, 25 A rms/35 A pk, powder core",wound toroid,3,2,6,ELECTRONICS,L1/L2/N
+I11,IM,Output filter caps,10 uF X2 275 VAC,generic,3,2,6,ELECTRONICS,
+I12,IM,Current sense,isolated shunt amps,TI AMC1301,4,2,8,ELECTRONICS,3 legs + DC input
+I13,IM,Voltage sense,isolated amps,TI AMC1311,4,2,8,ELECTRONICS,L1-N / L2-N / link / bus
+I14,IM,Input contactor,"EV HV DC contactor, 12 V coil, >=450 V, >=100 A",e.g. TE LEV100 or salvaged EV,1,2,2,COMMODITY,widely salvaged
+I15,IM,Precharge relay + resistor,">=450 V DC relay; ~100 Ohm 50 W",generic,1,2,2,ELECTRONICS,
+I16,IM,Output AC contactor,"3-pole (L1/L2/N), 40 A, 24 V coil",any DIN brand,1,2,2,COMMODITY,
+I17,IM,N-G bond relay,"AC relay, 24 V coil",any DIN brand,1,2,2,COMMODITY,driven by transfer switch aux
+I18,IM,CAN + sync transceivers,CAN + RS-485,TI TCAN1042 / THVD1450,1 set,2,2,ELECTRONICS,
+I19,IM,Aux supply,24 V -> 12/5 V,generic,1,2,2,ELECTRONICS,house 24 V aux (not PoE)
+I20,IM,Power PCB,"4-layer, 3 oz Cu",fab house,1,2,2,FAB,order 5
+I21,IM,Heatsink + fan,forced air,generic,1,2,2,COMMODITY,
+I22,IM,Enclosure / cassette,"steel, DIN-rail or plate mount",generic,1,2,2,COMMODITY,
+I23,IM,Passives/connectors lot,per schematic,-,1,2,2,ELECTRONICS,
+# SUPERVISOR + NETWORK,,,,,,,,,
+S01,supervisor,Computer,Raspberry Pi 5 (4-8 GB),RPi 5,2,1,2,COMMODITY,1 + 1 spare with cloned image
+S02,supervisor,CAN interface,"2-channel isolated CAN HAT",e.g. Waveshare 2-CH CAN HAT,2,1,2,ELECTRONICS,1 + spare
+S03,supervisor,Storage,industrial microSD or NVMe,generic,3,1,3,COMMODITY,imaged; 1 kept in the nav desk
+S04,supervisor,USB-CAN adapter,fallback: laptop as supervisor,e.g. CANable/PEAK,1,1,1,ELECTRONICS,
+S05,supervisor,PoE switch,"8x PoE-out, per-port control, DC in",MikroTik CRS112-8P-4S-IN,1,1,1,COMMODITY,needs 48-57 V in for 802.3af/at
+S06,supervisor,Spare PoE injectors,802.3af single-port,generic,2,1,2,COMMODITY,fallback if switch dies
+S07,supervisor,DIN enclosure + 24->5 V PSU,,generic,1,1,1,COMMODITY,
+# AC TEST PANEL,,,,,,,,,
+A01,AC,Panel/enclosure,DIN,generic,1,1,1,COMMODITY,
+A02,AC,Breaker,2-pole 20 A,generic,1,1,1,COMMODITY,
+A03,AC,RCD/GFCI,split-phase rated,generic,1,1,1,COMMODITY,
+A04,AC,AC cable,"3x6 mm2 (10 AWG) + PE, tinned marine",UL 1426 boat cable,10 m,1,10 m,COMMODITY,
+A05,AC,Test load,resistive 3.5 kW+ (heaters) + a motor load,generic,1,1,1,COMMODITY,
+# SPARES (fallback rule),,,,,,,,,
+P01,spares,MC4 pairs + bypass jumpers,,generic,10,1,10,COMMODITY,panel bypass (spec 10)
+P02,spares,10x38 gPV fuses 10/20 A,,generic,4,1,4,COMMODITY,
+P03,spares,200 V Si MOSFET,M04,,6,1,6,ELECTRONICS,
+P04,spares,1200 V SiC MOSFET,I02,,6,1,6,ELECTRONICS,
+P05,spares,650 V SiC diode,M06,,4,1,4,ELECTRONICS,
+P06,spares,UCC21520,,,4,1,4,ELECTRONICS,
+P07,spares,H1Z2Z2-K 6 mm2,,generic,20 m,1,20 m,COMMODITY,
+# TEST EQUIPMENT + SAFETY (if not already owned),,,,,,,,,
+T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",generic,1,1,1,ELECTRONICS,RM bench
+T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,ELECTRONICS,IM bench before the pack
+T03,test,Electronic load,">=500 V DC, >=1 kW",generic,1,1,1,ELECTRONICS,
+T04,test,Oscilloscope,"4-ch, >=200 MHz",generic,1,1,1,ELECTRONICS,
+T05,test,HV differential probes,">=1.5 kV",generic,2,1,2,ELECTRONICS,never ground-clip a floating HV node
+T06,test,Current probe,AC/DC clamp,generic,1,1,1,ELECTRONICS,
+T07,test,Multimeter,CAT III 1000 V / CAT IV 600 V,generic,1,1,1,COMMODITY,
+T08,test,Insulation tester,1000 V,generic,1,1,1,COMMODITY,
+T09,test,HV gloves + protectors,Class 0 (1000 V) + leather,generic,1,1,1,COMMODITY,test before each use
+T10,test,Face shield + LOTO kit,,generic,1,1,1,COMMODITY,
