@@ -13,7 +13,8 @@ R10,rail,Frame bond strap,tinned Cu braid + lugs to hull ground,generic,1,2,2,CO
 R11,rail,Fold-out provision: frame hinge-line drilling + stay mounts + stow latch,sized for 2 panels/bay,fabricated,1,2,2,FAB,fold-out panels/hinge/RM bought later (LLD 6.1)
 R12,rail,Stow latch reed switch mount,sealed reed switch + magnet,generic,1,2,2,COMMODITY,switch itself optional in Phase 1
 R13,rail,Pivot bushings,flanged bronze or UHMW sized for continuous tracking,generic,2,2,4,COMMODITY,tracker provision (LLD 6.2)
-R14,rail,Actuator clevis lugs,frame + fixed-structure lugs for linear actuator,fabricated,2,2,4,FAB,actuator bought later
+R14,rail,Actuator clevis lugs,frame + fixed-structure lugs sized for the R15 actuator's brackets,fabricated,2,2,4,FAB,
+R15,rail,Tracker actuator (LATER - not Phase 1),"1500 N, 400 mm stroke, 12 V, IP54 + bellows boot",ECO-WORTHY B00NM8H5SM,1,2,0,COMMODITY,buy later + 1 spare; 24->12 V DC-DC at rail
 D06,downrun,24 V tracker feed,6 mm2 tinned marine duplex,UL 1426 boat cable,35 m,2,70 m,COMMODITY,pulled now; capped (LLD W12)
 D07,downrun,Tracker feed breaker,DIN 10 A DC,generic,1,2,2,COMMODITY,in cabinet
 # DOWN-RUNS (x2),,,,,,,,,

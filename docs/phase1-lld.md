@@ -359,6 +359,11 @@ Phase 1 is manual pin positions. The tracker adds an actuator per side
 | Control | the **RM's MCU** runs the actuator loop (reserved I/O, §5). The **supervisor** computes the target angle from sun position (GPS time and position), heading, and roll/heel from Signal K, and sends it over the existing Ethernet link. No new network |
 | Stow logic | stow flat on high wind (anemometer via Signal K), when underway above a set speed [DECISION], on network loss (the RM drives to 0° on heartbeat timeout), and at night |
 | Fallback | a dead actuator: unpin it and set the manual pin (§6); the tracker only ever adds harvest |
+| Candidate actuator | **ECO-WORTHY solar-tracker linear actuator, 1500 N (330 lb), 400 mm (16 in) stroke, 12 V, IP54, with brackets** (Amazon B00NM8H5SM; owner's pick). Cheap, sold globally, made for exactly this job. Adjustments below |
+| → sealing | **IP54 is splash-proof, not salt-spray-proof.** Fit a bellows boot over the rod, put the motor end under the RM spray shield, and treat it as a consumable with a spare aboard. Or pay for an IP66 actuator of the same size |
+| → voltage | it's 12 V; the feed is 24 V. Use a small 24→12 V DC-DC at the rail, or the maker's 24 V version if one exists (not verified) |
+| → position | the listing shows no position feedback. The frame inclinometer/IMU (reserved RM I²C) measures the actual panel angle, which is better anyway: it sees roll too |
+| → force | rough check: 2 panels (≈2 m² with the fold-out deployed) in a 20 m/s wind is ≈600 N of panel load. Through a short actuator lever that reaches ≈1,100 N [DERIVED, rough, geometry not yet set], close to the 1500 N rating. The stow-on-wind rule is **required, not optional**; set the lug geometry so the actuator's lever arm is as long as the 400 mm stroke allows |
 
 ## 7. Supervisor and network
 
