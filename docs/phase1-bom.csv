@@ -10,9 +10,11 @@ R07,rail,PV cable string leads,4 mm2 H1Z2Z2-K red+black,generic,6 m,2,12 m,COMMO
 R08,rail,MC4 connector pairs,MC4 1000/1500 V,Staubli MC4 or compatible,4,2,8,COMMODITY,+ spares below
 R09,rail,Sun/spray shield for RM,Al or SS sheet,fabricated,1,2,2,FAB,
 R10,rail,Frame bond strap,tinned Cu braid + lugs to hull ground,generic,1,2,2,COMMODITY,
+R11,rail,Fold-out provision: frame hinge-line drilling + stay mounts + stow latch,sized for 2 panels/bay,fabricated,1,2,2,FAB,fold-out panels/hinge/RM bought later (LLD 6.1)
+R12,rail,Stow latch reed switch mount,sealed reed switch + magnet,generic,1,2,2,COMMODITY,switch itself optional in Phase 1
 # DOWN-RUNS (x2),,,,,,,,,
-D01,downrun,DC bus cable,6 mm2 H1Z2Z2-K 1.5 kV tinned,generic,2x35 m,2,140 m,COMMODITY,run length ASSUMED ~30 m; measure
-D02,downrun,Ethernet outdoor,"Cat6 S/FTP, UV jacket",generic,35 m,2,70 m,COMMODITY,
+D01,downrun,DC bus cable,6 mm2 H1Z2Z2-K 1.5 kV tinned,generic,4x35 m,2,280 m,COMMODITY,2 pairs/side: rail + reserved fold-out (spare run); length ASSUMED ~30 m
+D02,downrun,Ethernet outdoor,"Cat6 S/FTP, UV jacket",generic,2x35 m,2,140 m,COMMODITY,2 per side: rail + reserved fold-out
 D03,downrun,Conduit/clips,UV-rated conduit or SS clips every 450 mm,generic,1 lot,2,2,COMMODITY,
 D04,downrun,Deck/bulkhead glands,IP68 nylon or SS,generic,4,2,8,COMMODITY,
 D05,downrun,Labels,"""350 V DC"" and ""PV LIVE IN DAYLIGHT""",generic,1 set,2,2,COMMODITY,

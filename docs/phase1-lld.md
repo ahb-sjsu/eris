@@ -25,6 +25,9 @@ How this differs from the spec:
   realistic, ~1 kW nameplate.
 - The spec left the load side out of scope. This document designs it: a
   modular inverter in 3.5 kVA steps.
+- **Fold-out panels: reserved, not built** (§6.1). Each rail panel will later
+  carry a second panel on a top-edge piano hinge. Phase 1 builds the
+  structure, cable and cabinet space for them and buys nothing else.
 - **Trackers are deferred.** Phase 1 mounts are fixed tilt with manual pin
   positions. The tracker spec is still an open item.
 
@@ -69,7 +72,8 @@ while the others run.
 | Bus insulation monitor | internal | — | — | — |
 
 - **Busbars:** copper, ≥ 100 A, on DIN busbar insulators, with a finger-safe
-  cover. [DECISION] 100 A is enough for the full 24-panel array plus 7 IMs
+  cover. [DECISION] 100 A is enough for the full 24-panel array, the 24
+  reserved fold-outs (~35 A total solar at 350 V) and 6 IMs
   (§2.1).
 - **Bus SPD:** a solar-industry Type 2 PV SPD (1000 V DC). The rail runs are
   long exposed conductors on a steel ship with a radar mast.
@@ -305,8 +309,33 @@ substitutes.
 | RM location | on the fixed rail structure (not the rotating frame) under a sun/spray shield |
 | String wiring | panel leads → 4 mm² PV cable with MC4 → RM input gland, with drip loops |
 | Array bonding | panel frames bonded to hull ground (safety earth). The *array conductors* stay floating (spec §7) |
-| Down-run | 6 mm² H1Z2Z2-K red/black pair + Cat6 outdoor, together, in UV-rated conduit or clipped every ~450 mm; glands at the deck penetration |
+| Down-run | **two** 6 mm² H1Z2Z2-K red/black pairs + **two** Cat6 outdoor per side (one pair and one Cat6 each for the rail panels and the reserved fold-outs; the unused set is also a **spare run**, spec §10), together, in UV-rated conduit or clipped every ~450 mm; glands at the deck penetration |
 | Labels | "350 V DC" on the down-run at every access point; "PV, LIVE IN DAYLIGHT" on the string side |
+
+### 6.1 Fold-out provision (top-edge hinge; build later)
+
+Each rail panel will later carry a second, identical panel on a **316 SS
+piano hinge along its top edge**. Deployed, it opens upward to double
+the height; stowed, it folds down **back-to-back** onto the rail panel
+(glass out on both sides, the fold-out facing inboard).
+
+Built in Phase 1, so nothing has to be torn out later:
+
+| Provision | Detail |
+|---|---|
+| Frame strength | rail frame, clamps and stanchion attachment designed for **2 panels per bay** (~2 × panel mass [ASSUMED ~9 kg each]) plus deployed wind load on the doubled height. Size the loads once the panel is chosen |
+| Hinge line | top rail of the frame drilled/tapped for the hinge along its full length; isolating strip (G10/nylon) between the SS hinge and the Al panel frame |
+| Deployed stay | two stay/gas-strut mount points per bay, set for the deployed angle; a positive latch for the stowed position (not gravity) |
+| Stow sensor | a mount for one sealed reed switch per bay on the stow latch. Later the supervisor alarms if a fold-out is deployed while underway (speed over ground from Signal K) |
+| Hinge cable | a clamped service loop of flexible 4 mm² PV cable, MC4s free of strain, clamped both sides of the loop |
+| Down-run | second cable pair + second Cat6 per side pulled in Phase 1 (§8, W3F/W4F) |
+| Cabinet | DIN space reserved for **two more rail feeders** (fuse holder + isolator) per side; the busbar rating already covers them (§2) |
+| Rail modules | fold-outs get **their own string and their own RM**, never in series with the rail panels (a stowed fold-out would drag the rail string). Same RM board, no redesign |
+| Network | the 8-port switch covers Phase 1 plus the first fold-outs. At full build (6 rail + 6 fold-out RMs = 12) add a second PoE switch or a larger one |
+
+**Operating rule:** deploy only at anchor or alongside in settled weather;
+latched stowed underway. Deployed height doubles windage and puts a lever
+arm on the hinge.
 
 ## 7. Supervisor and network
 
@@ -331,7 +360,9 @@ Solar then goes to the house-battery path (spec §10).
 | W1 | panel ↔ panel | panel's own MC4 leads | — |
 | W2 | string → RM input | 4 mm² PV, MC4, ≤ 3 m | RM input ratings (spec §2) |
 | W3 (×2) | RM output → hold rail-feeder | **6 mm² H1Z2Z2-K** pair, ~30 m [ASSUMED; measure] | 10 A gPV at hold + isolator |
+| W3F (×2) | reserved fold-out RM → hold (pulled now, capped and labeled at both ends) | 6 mm² H1Z2Z2-K pair, same route | feeder space reserved |
 | W4 (×2) | RM ↔ PoE switch | Cat6 outdoor, shielded, UV | PoE port limit |
+| W4F (×2) | reserved fold-out RM ↔ switch (pulled now) | Cat6 outdoor | — |
 | W5 | pack HV → BIM | **25 mm² H1Z2Z2-K** pair, as short as possible | NH 40 A at the pack end |
 | W6 | pack LV connector → BIM | salvaged Leaf LV pigtail → 1.5 mm² tinned + twisted pair for CAN | 5 A blade fuse on 12 V |
 | W7 | busbar → IM DC in | 4 mm² H1Z2Z2-K | 20 A gPV + isolator |
@@ -384,4 +415,5 @@ Each step passes before the next begins:
 5. Transfer switching between shore/genset and the IM AC output; where Phase
    1's AC panel ties in (not to the 440 V bus).
 6. Insurer notification: no NRTL on panels or custom modules; solar cable, not boat cable.
-7. Tracker mechanical spec (Phase 2).
+7. Tracker mechanical spec (Phase 2); it must carry the fold-out geometry of §6.1.
+8. Fold-out wind and hinge loads, and the deployed-weather limit, once the panel is chosen.
