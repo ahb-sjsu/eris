@@ -135,12 +135,12 @@ P06,spares,UCC21520,,,4,1,4,ELECTRONICS,,13.32,13.32,QUOTE,
 P07,spares,H1Z2Z2-K 6 mm2,,generic,20 m,1,20 m,COMMODITY,,22.00,23.00,EST (research),as D01
 # TEST EQUIPMENT + SAFETY (if not already owned),,,,,,,,,,,,,
 T01,test,Programmable DC supply / PV simulator,">=150 V, >=10 A",OWNED: 2x Sorensen DCS60-18E,1,1,1,OWNER BENCH,series = 120 V/18 A covers 4S; check DCS max output float vs chassis before series; add series R for a sloped I-V curve,0.00,0.00,OWNED,
-T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,OWNER BENCH,IM bench before the pack,0.00,699.00,OWNED? (high = budget buy if missing),ETOMMENS eTM-6002
-T03,test,Electronic load,">=500 V DC, >=1 kW",generic,1,1,1,OWNER BENCH,,0.00,1070.00,OWNED? (high = budget buy if missing),Maynuo M9714B
+T02,test,HV DC supply,">=450 V, >=2 A, current-limited",generic,1,1,1,BUY (not on bench),IM bench before the pack,699.00,699.00,BUDGET OPTION,ETOMMENS eTM-6002
+T03,test,Electronic load,">=500 V DC, >=1 kW",generic,1,1,1,BUY (not on bench),,1070.00,1070.00,BUDGET OPTION,Maynuo M9714B
 T04,test,Oscilloscope,"4-ch, >=200 MHz",OWNED: Tektronix DPO,1,1,1,OWNER BENCH,,0.00,0.00,OWNED,
-T05,test,HV differential probes,>=1.5 kV,generic,2,1,2,OWNER BENCH,never ground-clip a floating HV node,0.00,710.00,OWNED? (high = budget buy if missing),2x Micsig DP1500
-T06,test,Current probe,AC/DC clamp,generic,1,1,1,OWNER BENCH,,0.00,370.00,OWNED? (high = budget buy if missing),Micsig CP2100A
-T07,test,Multimeter,CAT III 1000 V / CAT IV 600 V,generic,1,1,1,OWNER BENCH,,0.00,148.00,OWNED? (high = budget buy if missing),Klein MM700
-T08,test,Insulation tester,1000 V,generic,1,1,1,OWNER BENCH,,0.00,184.10,OWNED? (high = budget buy if missing),Klein ET600
-T09,test,HV gloves + protectors,Class 0 (1000 V) + leather,generic,1,1,1,OWNER BENCH,test before each use,0.00,165.00,OWNED? (high = budget buy if missing),Salisbury GK011R
-T10,test,Face shield + LOTO kit,,generic,1,1,1,OWNER BENCH,,0.00,196.00,OWNED? (high = budget buy if missing),LOTO + arc shield
+T05,test,HV differential probes,>=1.5 kV,generic,2,1,2,BUY (not on bench),never ground-clip a floating HV node,710.00,710.00,BUDGET OPTION,2x Micsig DP1500
+T06,test,Current probe,AC/DC clamp,generic,1,1,1,BUY (not on bench),,370.00,370.00,BUDGET OPTION,Micsig CP2100A
+T07,test,Multimeter,CAT III 1000 V / CAT IV 600 V,generic,1,1,1,BUY (not on bench),,148.00,148.00,BUDGET OPTION,Klein MM700
+T08,test,Insulation tester,1000 V,generic,1,1,1,BUY (not on bench),,184.10,184.10,BUDGET OPTION,Klein ET600
+T09,test,HV gloves + protectors,Class 0 (1000 V) + leather,generic,1,1,1,BUY (not on bench),test before each use,165.00,165.00,BUDGET OPTION,Salisbury GK011R
+T10,test,Face shield + LOTO kit,,generic,1,1,1,BUY (not on bench),,196.00,196.00,BUDGET OPTION,LOTO + arc shield

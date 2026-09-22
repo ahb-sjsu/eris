@@ -26,7 +26,7 @@ included. Conversions assumed €1 = $1.15 and NZ$1 = $0.58.
 | **Phase 1 total** | **~18,100** | **~32,400** | |
 | of which the Leaf pack | 4,450 | 10,600 | |
 | **Phase 1 without the pack** | **~13,600** | **~21,800** | |
-| Test gear the owner doesn't already have | 0 | ~5,000 | see below |
+| Test gear to buy (owner has none of T02, T03, T05–T10) | 3,542 | 3,542 | budget options; see below |
 
 ## Test equipment: check against your bench
 
