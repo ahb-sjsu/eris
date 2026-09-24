@@ -177,6 +177,11 @@ topology:
       auxiliary:
         serves: [electrical.generators.1, electrical.generators.2, firePump]
         note: shared chest; each consumer has its own duplex strainer
+        common_mode: >
+          Analysis, not a vessel fact: fouling at the chest itself (not a
+          strainer basket) would take generator cooling and fire pump
+          suction together. Whether a blow-out connection or an emergency
+          crossover from a main's chest exists is not recorded.
     # candidate future channels, NOT yet sensed: strainer differential
     # pressure or vacuum per duplex basket -- the standard early-warning
     # for fouling. Decide per-consumer when specifying senders.
@@ -184,6 +189,11 @@ topology:
 firePump:
   driver: electric
   suction: topology.rawWater.seaChests.auxiliary (own duplex strainer)
+  medium: seawater   # owner-confirmed 2026-09-24
+  piping: >
+    2 in copper, heavy wall; completely separate from the fresh water
+    system (owner-confirmed 2026-09-24). The only metal piping left from
+    the original ship's systems -- see removedSystems.
   stations:
     port:      {desc: hose attachment, adjacent to hose stowage}
     starboard: {desc: hose attachment, adjacent to hose stowage}
@@ -220,11 +230,53 @@ hydraulics:
         chainOut:  {unit: m,    sensed: false, desc: candidate chain counter}
     transomCrane: {status: removed, note: removed by the Navy; plumbing may remain}
 
+# --- fresh water system (owner-confirmed 2026-09-24) ---
+# Tank level/capacity points live at points.tanks.freshWater above. The
+# original ship's hot/cold piping was removed (see removedSystems); what is
+# aboard now is a PVC system installed by the previous owner. A PEX refit
+# is planned -- docs/freshwater-refit.md. Equipment models, pipe sizes and
+# fixture list are gaps until Jim's survey returns.
+freshWater:
+  source: points.tanks.freshWater.main   # 1,500 gal
+  components: [pump, accumulator, waterHeater, "hot/cold runs to sinks and showers"]
+  piping:
+    current: PVC, previous owner's install (PVC vs CPVC on hot side unconfirmed)
+    planned: PEX refit
+  pump:        {model: TBD, supply: TBD}
+  accumulator: {model: TBD}
+  waterHeater: {model: TBD, heat_source: TBD}   # electric only, or engine coolant too
+  points:
+    pumpRunState:      {type: bool, sensed: false, desc: candidate}
+    systemPressure:    {unit: Pa,   sensed: false, desc: candidate, downstream of accumulator}
+    heaterOutletTemp:  {unit: K,    sensed: false, desc: candidate}
+
+# --- original systems removed, reason unknown (owner-confirmed 2026-09-24) ---
+removedSystems:
+  freshWaterPiping:  {status: removed, note: original hot/cold plumbing; replaced by PO PVC}
+  hvacHydronic:      {status: removed, note: heating and chilled-water plumbing; nothing replaces it}
+  co2FireSuppression:
+    status: removed
+    note: >
+      Fixed CO2 system and its piping gone. Whether any fixed engine-room
+      suppression exists now is not recorded -- a safety gap, not only a
+      twin gap.
+  penetrations: >
+    Every removed run passed through bulkheads. Whether those holes are
+    open, plugged, or properly sealed (watertight / fire boundaries) is
+    not recorded. Any leftover lagging on 1960s pipe gets tested before
+    it is disturbed.
+
 # --- known gaps, to be specified from the vessel (not invented here) ---
 # electrical.dc: house bank (exists?), chargers, shore power, solar
 # tanks: black/gray water capacities; fuel plumbing topology (wing->day
 #   transfer path, polishing loop valve lineup); sender types per tank
 # firePump: motor rating; whether discharge pressure gets a sender
+# freshWater: pump/accumulator/heater models, pipe sizes and routing,
+#   fixture list -- survey list in docs/freshwater-refit.md
+# fire suppression: what (if anything) protects the engine room now that
+#   the CO2 system is gone
+# removedSystems: state of every abandoned bulkhead penetration
+# seaChests.auxiliary: blow-out connection? crossover from a main's chest?
 # hydraulics: pump driver (electric vs PTO) and rating; whether crane
 #   circuit plumbing survives in the lazarette
 # navigation: GPS, heading, depth, wind -- standard Signal K, arrives free

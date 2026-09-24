@@ -76,6 +76,9 @@ draft and trim depend on it.
     research-enabling upgrade identified in the assessment.
 16. Any **stern wedge, bilge keels, or trim devices** already fitted.
 
+Fresh water, removed-system penetrations, and fire protection have their
+own survey list in `docs/freshwater-refit.md`.
+
 ---
 
 *Anything measured here should be added to `schema/points.yaml` (plant
