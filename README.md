@@ -65,3 +65,12 @@ Three principles:
       the deck plan with live overlays.
 - [ ] **Process models**: fuel polishing is done; add engine start/stop
       checklists and the leeboard deployment procedure as they stabilize.
+
+## License
+
+Two licenses, split by what the file is.
+
+| What | License | File |
+|---|---|---|
+| Prose and figures: documentation, articles, papers, notes, figures, data, README | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | `LICENSE-TEXT` |
+| Source code: the package, scripts, tools, experiment harnesses, the code in notebooks | [MIT](https://opensource.org/licenses/MIT) | `LICENSE` |
